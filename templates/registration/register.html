@@ -1,0 +1,109 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Parent Registration Form</title>
+   
+    {%include './css.html'%}
+</head>
+
+<body class="bg-gradient-primary">
+    
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-12">
+                        <div class="p-5" >
+                           
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Kria Konta foun!</h1>
+                            </div>
+                            <form class="user" method="POST">
+                                {%csrf_token%}
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        {{ form.first_name.label_tag }}    {{form.first_name}}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ form.last_name.label_tag }}    {{form.last_name}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        {{ form.email.label_tag }}   {{form.email}}
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        {{ form.username.label_tag }}  {{form.username}}
+
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-group row">
+                                    
+                                    <div class="col-sm-6 ">
+                                        {{ parent_add.municipality.label_tag }}  {{parent_add.municipality}}
+                                    </div>
+                                    
+                                    <div class="col-sm-6 ">
+                                        {{ parent_add.administrative_post.label_tag }}  {{parent_add.administrative_post}}
+                                    </div>
+                                  
+                                </div>
+                                <div class="form-group row">
+
+                                       
+                                    <div class="col-sm-6 ">
+                                        {{ parent_add.suco.label_tag }}  {{parent_add.suco}}
+                                    </div>
+
+                                    <div class="col-sm-6 ">
+                                        {{ parent_add.village.label_tag }}  {{parent_add.village}}
+                                    </div>
+                                  
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-primary btn-user btn-block">Rejistu</button>
+                                    </div>
+                                </div>
+                               
+                                
+                                <hr>
+                                {% comment %} <a href="index.html" class="btn btn-google btn-user btn-block">
+                                    <i class="fab fa-google fa-fw"></i> Register with Google
+                                </a>
+                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+                                </a> {% endcomment %}
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Haluan Password?</a>
+                            </div>
+                            <div class="text-center">
+                                <a class="small" href="{%url 'login'%}">Iha ona Konta? Login!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</body>
+
+{%include './js.html' %}
+
+</html>

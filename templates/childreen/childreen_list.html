@@ -1,0 +1,206 @@
+<style>
+  tr.htmx-swapping td {
+  opacity: 0;
+  transition: opacity 10s ease-out;
+  }
+</style>
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row content-home mt-1 mb-1">
+      <div class="col-12">
+        <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+        >
+        
+  
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item">
+                <a href="javascript: void(0);">Childreen</a>
+              </li>
+              <li class="breadcrumb-item active">Childreen List</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row content-home">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <div class="mb-3 ">
+                  <a
+                    href=""
+                    class="btn btn-success pl-1"  data-toggle="modal" data-target="#addChildModal"
+                    ><i class="fa fa-builiding-o " aria-hidden="true" ></i>Kria Konta Labarik Nian</a
+                  >
+                </div>
+              </div>
+  
+              <div class="col-md-6">
+                <div class="form-inline float-md-right mb-3">
+                  <div class="search-box ml-2">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control rounded bg-light border-0"
+                        placeholder="Search..."
+                      />
+                      <i class="mdi mdi-magnify search-icon"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end row -->
+             <div class="card">
+              <div class="card-header">
+                <h4 class="mb-0">Lista Labarik Sira</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive mb-4">
+                  <table class="table table-centered table-nowrap table-check mb-0" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          ID
+                        </th>
+                        <th scope="col">Naran Kompletu</th>
+                        <th scope="col">Kodigu</th>
+                        <th scope="col">Tinan Moris</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody >
+                      {%for student in students %}
+                      <tr>
+                        <td>
+                          {{student.id}}
+                        </td>
+                        <td>
+                          <a href="#" class="text-body">{{student.first_name }} {{student.last_name }}</a>
+                        </td>
+                        <td>{{student.code.code}}</td>
+                        <td>{{student.year_birth}}</td>
+                          <td>
+
+                            <!-- Edit button with HTMX load for modal -->
+                            <a 
+                            href="{% url 'edit-student' student.id %}" 
+                            class="btn btn-info"
+                            data-toggle="modal" 
+                            data-id ="{{student.id}} "
+                            data-target="#editChildModal">Edit Child</a>
+                          
+                            
+                            {% comment %} <a href="{% url 'edit-student' student.id%}"  class="btn btn-info">Edit Child</a> {% endcomment %}
+                            <a hx-delete="{% url 'delete-student' student.id %}"
+                             hx-confirm="Pronto atu apaga naran estudante ida ne'e?" 
+                             hx-swap="none" 
+                             class="btn btn-danger btn-circle btn-md">
+                              <i class="fas fa-trash"></i></a>
+                         
+                              
+                          </a>
+                          </td>
+                        </td> <!-- This closing tag is incorrect -->
+                        
+                      </tr>
+                      {% endfor %}
+        
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+             </div>
+           
+          </div>
+        </div>
+      </div>
+      <!-- <div class="pagination">
+          <span class="step-links">
+              {% if page_obj.has_previous %}
+                  <a href="?page=1">&laquo; first</a>
+                  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+              {% endif %}
+      
+              <span class="current">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+              </span>
+      
+              {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}">next</a>
+                  <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+          </span>
+      </div> -->
+    </div>
+  </div>
+  <!-- Modal -->
+<!-- Modal for editing a child -->
+<div class="modal fade" id="editChildModal" tabindex="-1" role="dialog" aria-labelledby="editChildModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editChildModalLabel">Atualizar Naran</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+          <form method="post">
+              {% csrf_token %}
+              {{form_edit}}
+              <button type="submit" class="btn btn-info m-1">Atualizar</button>
+          </form>
+      </div> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        event.detail.headers['X-CSRFToken'] = csrfToken;
+    });
+
+    document.body.addEventListener('htmx:beforeOnLoad', (event) => {
+        var response = event.detail.xhr.response;
+        try {
+            var json = JSON.parse(response);
+            if (json.redirect) {
+                window.location.href = json.url;
+            }
+        } catch (e) {
+            // Do nothing if response is not JSON (for non-HTMX requests)
+        }
+    });
+
+
+    $(document).on('click', '.edit-button', function() {
+      // Get the data-id value from the clicked button
+      var studentId = $(this).data('id');
+      console.log(studentId)
+      // Use AJAX to send the studentId in a request (or load data into a modal, etc.)
+      $.ajax({
+          type: 'GET',  // Or 'POST', depending on your requirement
+          url: `/student-edit/${studentId}/`,  // Update this URL with the correct path
+          success: function(response) {
+              // Load the response into the modal or handle it as needed
+              $('#editChildModal .modal-body').html(response);
+          },
+          error: function(xhr, status, error) {
+              console.error('Error fetching student data:', error);
+          }
+      });
+  });
+</script>
+  
+  
+
+  

@@ -1,0 +1,14 @@
+{% extends "dashboard/layout.html" %}
+
+{%block content%}
+<div class="card">
+    <div class="card-header"></div>
+    <div class="card-body">
+        {% include '../childreen/childreen_list.html'%}
+        {% include '../childreen/add_childreen.html'%}
+        {% include '../childreen/edit_profile.html'%}
+        {% include '../childreen/change_password.html'%}
+    </div>
+</div>
+   
+{%endblock%}

@@ -1,0 +1,120 @@
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row content-home mt-1 mb-1">
+      <div class="col-12">
+        <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+        >
+          <h4 class="mb-0">Users List</h4>
+  
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item">
+                <a href="javascript: void(0);">Users</a>
+              </li>
+              <li class="breadcrumb-item active">Users List</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row content-home">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <div class="mb-3 ">
+                  <a
+                    href=""
+                    class="btn btn-success pl-1"  data-toggle="modal" data-target="#addChildModal"
+                    ><i class="fa fa-builiding-o " aria-hidden="true" ></i>Create New Users</a
+                  >
+                </div>
+              </div>
+  
+              <div class="col-md-6">
+                <div class="form-inline float-md-right mb-3">
+                  <div class="search-box ml-2">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control rounded bg-light border-0"
+                        placeholder="Search..."
+                      />
+                      <i class="mdi mdi-magnify search-icon"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end row -->
+            <div class="table-responsive mb-4">
+              <table class="table table-centered table-nowrap table-check mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">
+                      ID
+                    </th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Last Login</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%for user in user %}
+                  <tr>
+                    <td>
+                      {{user.id}}
+                    </td>
+                    <td>
+                      <a href="#" class="text-body">{{user.first_name }} {{user.last_name}}</a>
+                    </td>
+                    <td>{{user.last_login}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.username}}</td>
+                      <td>
+                          <a href="#" class="btn btn-info">Edit</a>
+                      </td>
+                    </td>
+                  </tr>
+                  {%endfor%}
+    
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pagination">
+          <span class="step-links">
+              {% if page_obj.has_previous %}
+                  <a href="?page=1">&laquo; first</a>
+                  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+              {% endif %}
+      
+              <span class="current">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+              </span>
+      
+              {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}">next</a>
+                  <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+          </span>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+
+
+
+ 
+
+  
+  
+
+  

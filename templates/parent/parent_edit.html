@@ -1,0 +1,9 @@
+{% extends "dashboard/layout.html" %}
+{%block content%}
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form}}
+
+        <button class="btn btn-success mt-1">Update</button>
+    </form>
+{%endblock %}

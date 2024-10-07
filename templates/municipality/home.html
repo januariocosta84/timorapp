@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Dependent Dropdown</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body>
+    <h1>Select Dependent Dropdown Example</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+<!-- Village Dropdown -->
+<label for="village">Village:</label>
+<select id="village" name="village">
+    <option value="">Select a village</option>
+    {% for village in villages %}
+        <option value="{{ village.id }}">{{ village.name }}</option>
+    {% endfor %}
+</select>
+
+<!-- Suco Dropdown -->
+<label for="suco">Suco:</label>
+<select id="suco" name="suco">
+    <option value="">Select a suco</option>
+</select>
+
+<!-- Administrative Post Dropdown -->
+<label for="administrative_post">Administrative Post:</label>
+<select id="administrative_post" name="administrative_post">
+    <option value="">Select an administrative post</option>
+</select>
+
+<!-- Municipality Dropdown -->
+<label for="municipality">Municipality:</label>
+<select id="municipality" name="municipality">
+    <option value="">Select a municipality</option>
+</select>
+
+    </form>
+
+    <!-- Optional: Add a script to handle form submission if needed -->
+</body>
+<!-- Include jQuery for AJAX (or use Vanilla JavaScript) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- jQuery for AJAX requests -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // Handle Village change
+        $('#village').change(function(){
+            var villageId = $(this).val();
+            if(villageId){
+                $.ajax({
+                    url: "{% url 'get_sucos' %}",
+                    data: {'village': villageId},
+                    success: function(data){
+                        $('#suco').empty();
+                        $('#suco').append('<option value="">Select a suco</option>');
+                        $.each(data, function(key, value){
+                            $('#suco').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#suco').empty();
+                $('#suco').append('<option value="">Select a suco</option>');
+            }
+        });
+
+        // Handle Suco change
+        $('#suco').change(function(){
+            var sucoId = $(this).val();
+            if(sucoId){
+                $.ajax({
+                    url: "{% url 'get_administrative_posts' %}",
+                    data: {'suco_id': sucoId},
+                    success: function(data){
+                        $('#administrative_post').empty();
+                        $('#administrative_post').append('<option value="">Select an administrative post</option>');
+                        $.each(data, function(key, value){
+                            $('#administrative_post').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#administrative_post').empty();
+                $('#administrative_post').append('<option value="">Select an administrative post</option>');
+            }
+        });
+
+        // Handle Administrative Post change
+        $('#administrative_post').change(function(){
+            var administrativePostId = $(this).val();
+            if(administrativePostId){
+                $.ajax({
+                    url: "{% url 'get_municipalities' %}",
+                    data: {'administrative_post_id': administrativePostId},
+                    success: function(data){
+                        $('#municipality').empty();
+                        $('#municipality').append('<option value="">Select a municipality</option>');
+                        $.each(data, function(key, value){
+                            $('#municipality').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#municipality').empty();
+                $('#municipality').append('<option value="">Select a municipality</option>');
+            }
+        });
+    });
+</script>
+</html>
