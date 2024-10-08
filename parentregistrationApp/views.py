@@ -313,6 +313,13 @@ def phone_num_val(request):
                 <button type='submit' class='btn btn-primary' id='submitBtn'> submit</button> ")
 
 
+def all_parents(request):
+    parents = Parent.objects.all()
+    context ={
+        'parents':parents
+    }
+    return render(request, 'parent/all_parents.html',context=context)
+
 class PhoneValidation(View):
 
     def get(self, request, *args, **kwargs):

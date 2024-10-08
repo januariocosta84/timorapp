@@ -5,7 +5,7 @@ from .views import( PhoneValidation, list_suco, list_village,
                    registration_parent_view, 
                    list_municipality_view,
                    student_delete_view,
-
+                  all_parents,
                    #home,
                    #get_administrative_posts,
                    #get_sucos,
@@ -46,8 +46,9 @@ urlpatterns = [
     path('students/parent/', parent_home, name='parent-dash'),
     path('load-administrative-posts/', list_posto_administrative, name='load-administrative-posts'),
     path('load-sucos/', list_suco, name='load-sucos'),
-     path('load-village/', list_village, name='load-village'),
-     path('load-num/',PhoneValidation.as_view(), name ='load-num')
+    path('load-village/', list_village, name='load-village'),
+    path('load-num/',PhoneValidation.as_view(), name ='load-num'),
+    path('parents/', all_parents, name='all-parents'),
    #path('load-municipalities/', load_municipalities, name='load-municipalities'),
    
 
