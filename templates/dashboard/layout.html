@@ -46,8 +46,9 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    {% include './messaging.html' %}
                     {% block content %} 
-
+                    
                     
                     {% endblock content %}
                    
@@ -126,5 +127,4 @@
     <script src="{%static 'dashboard/js/htmx.min.js'%}"></script>
     <script src="{%static 'js/alpine.js'%}"></script>
 </body>
-
 </html>

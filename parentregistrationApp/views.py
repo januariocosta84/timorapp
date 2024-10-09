@@ -67,43 +67,57 @@ class Login_View(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
+            messages.success(request,"Ita Login ho susesu")
             return redirect(resolve_url('parent-dashboard'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         if self.request.user.is_authenticated:
+            messages.success(self.request,"Ita Login ho susesu")
             return resolve_url('parent-dashboard')
         return super().get_success_url()
     
 class Logout_View(View):
     def get(self,request):
         logout(self.request)
+        messages.success(request, "ita Logout ho susesu adeus")
         return redirect ('login',permanent=True)
 
 def registration_parent_view(request):
-    
     if request.method == 'POST':
         add_form = AddressForm(request.POST)
         form = ParentForm(request.POST)
         parent_add = ParentFormRegist(request.POST)
-        print("Bug",parent_add.is_valid())
-        print("Second bug",form.is_valid())
+        
+        # Debugging prints
+        print("Bug", parent_add.is_valid())
+        print("Second bug", form.is_valid())
+        
         if form.is_valid() and parent_add.is_valid():
-                user = form.save()
-                parent = Parent.objects.get(user=user)
-                parent.municipality = parent_add.cleaned_data['municipality']
-                parent.administrative_post = parent_add.cleaned_data['administrative_post']
-                parent.suco = parent_add.cleaned_data['suco']
-                parent.village = parent_add.cleaned_data['village']
-                parent.save()
-                return redirect('/login')
+            user = form.save()
+            parent = Parent.objects.get(user=user)
+            parent.municipality = parent_add.cleaned_data['municipality']
+            parent.administrative_post = parent_add.cleaned_data['administrative_post']
+            parent.suco = parent_add.cleaned_data['suco']
+            parent.village = parent_add.cleaned_data['village']
+            parent.save()
+            messages.success(request, "Ita nia rejistu halo ho susesu")
+            return redirect('/login')
+        else:
+            # If forms are invalid, add error message
+            messages.error(request, "Rejistu falta buat ruma ou karik. Favór, hare erro sira iha kraik.")
+    
     else:
         form = ParentForm()
         parent_add = ParentFormRegist()
         add_form = AddressForm()
-    
-    return render(request, 'registration/register.html', {'form': form, 'parent_add':parent_add, 'add_form':add_form})
 
+    return render(request, 'registration/register.html', {
+        'form': form, 
+        'parent_add': parent_add, 
+        'add_form': add_form
+    })
+    
 def parent_update(request):
     id = request.user.id
     print(id)
@@ -176,12 +190,12 @@ def parent_home(request):
 
 def student_edit_view(request, id):
     student = get_object_or_404(Student, id=id)
-
     if request.method == 'POST':
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return JsonResponse({'success': True})
+            messages.success(request,"Naran labarik update ho susesu!")
+            return redirect('parent-dashboard')
     else:
         form = StudentForm(instance=student)
         return render(request, 'childreen/student_edit.html', {'form_edit': form})

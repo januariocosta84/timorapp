@@ -31,6 +31,7 @@
                             </div>
 
                             <div class="card-body">
+                                {% include 'dashboard/messaging.html'%}
                                 <form class="user" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group row">

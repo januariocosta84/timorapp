@@ -1,15 +1,12 @@
-
-
-{%block content%}
+{% extends "dashboard/layout.html" %} {%block content%}
 <div class="card">
-        <div class="card-header">Edit Form</div>
-   
-    <div class="card-body">
-        <form method="post">
-            {% csrf_token %}
-            {{form_edit}}
-            <button type="submit" class="btn btn-info m-1">Atualizar</button>
-        </form>
-    </div> 
+  {% include 'dashboard/messaging.html' %}
+  <div class="card-header border-bottom-info">Edit Form</div>
+  <div class="card-body border-bottom-info">
+    <form method="post" class="pt-1">
+      {% csrf_token %} {{form_edit}}
+      <button type="submit" class="btn btn-info m-1">Atualizar</button>
+    </form>
+  </div>
 </div>
 {%endblock%}
