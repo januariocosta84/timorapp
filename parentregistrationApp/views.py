@@ -329,8 +329,12 @@ def phone_num_val(request):
 
 def all_parents(request):
     parents = Parent.objects.all()
+    count_parents = Parent.objects.count()
+    children = Student.objects.count()
     context ={
-        'parents':parents
+        'parents':parents,
+        'counts_parents':count_parents,
+        'child':children
     }
     return render(request, 'parent/all_parents.html',context=context)
 
