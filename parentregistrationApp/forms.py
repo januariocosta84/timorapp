@@ -98,8 +98,7 @@ class ParentForm(forms.ModelForm):
         return user
 def send_otp(phone_number, otp_code):
     # Use environment variables for sensitive data
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "fake")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "fake")
+    
     client = Client(account_sid, auth_token)
 
     try:
