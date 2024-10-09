@@ -55,23 +55,34 @@ class ParentForm(forms.ModelForm):
        # help_text="Phone number must start with +670 and have 8 digits starting with 7."
     )
 
-    email = forms.CharField(
-        label="Email",
-        widget=forms.TextInput(attrs={'class': 'form-control',
+    # email = forms.CharField(
+    #     label="Email",
+    #     widget=forms.TextInput(attrs={'class': 'form-control',
                 
-                                      'placeholder': "Email",
-                                     }),
-       # help_text="Phone number must start with +670 and have 8 digits starting with 7."
-    )
+    #                                   'placeholder': "Email",
+    #                                  }),
+    #    # help_text="Phone number must start with +670 and have 8 digits starting with 7."
+    # )
+    # def __init__(self, *args, **kwargs):
+    #         super(User, self).__init__(*args, **kwargs)
+    #         self.fields['email'].required = False
+
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
+        labels ={
+            'email':'Email'
+        }
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder':'jcosta@yahoo.com'}),
         }
+
+        def __init__(self, *args, **kwargs):
+            super(User, self).__init__(*args, **kwargs)
+            self.fields['email'].required = False
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -96,27 +107,28 @@ class ParentForm(forms.ModelForm):
             send_otp(user.username, message)  # Assuming username is the phone number
 
         return user
-def send_otp(phone_number, otp_code):
-    # Use environment variables for sensitive data
-    
-    client = Client(account_sid, auth_token)
+# def send_otp(phone_number, otp_code):
+#     # Use environment variables for sensitive data
+#     account_sid = os.getenv("TWILIO_ACCOUNT_SID", "AC3704c56723579efe1364b541ae372c58")
+#     auth_token = os.getenv("TWILIO_AUTH_TOKEN", "9e9d3b380ca2489cfa37739fc496d954")
+#     client = Client(account_sid, auth_token)
 
-    try:
-        # Ensure the phone number has the correct format (with country code)
-        if not re.match(r"^\+\d{10,15}$", phone_number):
-            raise ValueError("Invalid phone number format. It must include the country code.")
+#     try:
+#         # Ensure the phone number has the correct format (with country code)
+#         if not re.match(r"^\+\d{10,15}$", phone_number):
+#             raise ValueError("Invalid phone number format. It must include the country code.")
 
-        # Create the OTP verification request using the actual phone number
-        message = client.verify \
-                        .v2 \
-                        .services('VA2174049af7d730392b6bb2246fb9094c') \
-                        .verifications \
-                        .create(to=phone_number, channel='sms')
+#         # Create the OTP verification request using the actual phone number
+#         message = client.verify \
+#                         .v2 \
+#                         .services('VA2174049af7d730392b6bb2246fb9094c') \
+#                         .verifications \
+#                         .create(to=phone_number, channel='sms')
 
-        return message.sid  # Returning message SID for further tracking/logging
-    except Exception as e:
-        print(f"Failed to send OTP: {str(e)}")
-        return None
+#         return message.sid  # Returning message SID for further tracking/logging
+#     except Exception as e:
+#         print(f"Failed to send OTP: {str(e)}")
+#         return None
 
 # class ParentForm(UserCreationForm):
 #     username = forms.CharField(

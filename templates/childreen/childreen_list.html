@@ -86,11 +86,14 @@
                         <td>{{student.code.code}}</td>
                         <td>{{student.year_birth}}</td>
                           <td>
-
+                            
                             <!-- Edit button with HTMX load for modal -->
                             <a 
                             href="{% url 'edit-student' student.id %}" 
-                            class="btn btn-info">Editar</a>
+                            class="btn btn-info"
+                            >
+                            Editar
+                            </a>
                           
                             
                             {% comment %} <a href="{% url 'edit-student' student.id%}"  class="btn btn-info">Edit Child</a> {% endcomment %}
@@ -98,8 +101,8 @@
                              hx-confirm="Pronto atu apaga naran estudante ida ne'e?" 
                              hx-swap="none" 
                              class="btn btn-danger btn-circle btn-md">
-                              <i class="fas fa-trash"></i></a> 
-                          </a>
+                              <i class="fas fa-trash"></i>
+                            </a> 
                           </td>
                         </td> <!-- This closing tag is incorrect -->
                         
