@@ -98,8 +98,8 @@ class ParentForm(forms.ModelForm):
         return user
 def send_otp(phone_number, otp_code):
     # Use environment variables for sensitive data
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "")
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "AC3704c56723579efe1364b541ae372c58")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "9e9d3b380ca2489cfa37739fc496d954")
     client = Client(account_sid, auth_token)
 
     try:
@@ -112,7 +112,7 @@ def send_otp(phone_number, otp_code):
                         .v2 \
                         .services('VA2174049af7d730392b6bb2246fb9094c') \
                         .verifications \
-                        .create(to=phone_number, channel='whatsapp')
+                        .create(to=phone_number, channel='sms')
 
         return message.sid  # Returning message SID for further tracking/logging
     except Exception as e:
@@ -252,16 +252,25 @@ print(four_years_ago.year)
 
 YEAR_CHOICES = [(year, year) for year in range(four_years_ago.year, datetime.datetime.now().year + 1)]
 class StudentForm(forms.ModelForm):
-    year_birth = forms.ChoiceField(choices=YEAR_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    year_birth = forms.ChoiceField(choices=YEAR_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}), label='Tinan moris')
     class Meta:
         model = Student
-        fields = ['first_name', 'last_name',  'year_birth']
+        fields = [
+                    'first_name', 
+                    'last_name', 
+                    'year_birth'
+                ]
+        labels = {
+                'first_name':'Naran dahuluk',
+                'last_name': 'Naran ikus',
+                'year_birth': 'Tinan moris',
+        }
         
         
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            #'year_birth': forms.TextInput(attrs={'class': 'form-control'}),
+            'year_birth': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 class VillageForm(forms.ModelForm):
