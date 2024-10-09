@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,98 +12,91 @@
 
     <title>Parent Registration Form</title>
    
-    {%include './css.html'%}
+    {% include './css.html' %} <!-- Ensure the correct path to your 'css.html' file -->
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-info">
     
     <div class="container">
-        <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card o-hidden border-none shadow-lg my-5 bg-gradient border-bottom-info">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                     <div class="col-lg-12">
-                        <div class="p-5" >
+                        <div class="p-5">
                            
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Kria Konta foun!</h1>
+                            <div class="text-muted text-uppercase card-header border-bottom-info">
+                                <h1 class="h4 text-gray-900 mb-4">Kria Konta Foun!</h1>
                             </div>
-                            <form class="user" method="POST">
-                                {%csrf_token%}
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        {{ form.first_name.label_tag }}    {{form.first_name}}
-                                    </div>
-                                    <div class="col-sm-6">
-                                        {{ form.last_name.label_tag }}    {{form.last_name}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6">
-                                        {{ form.email.label_tag }}   {{form.email}}
-                                    </div>
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        {{ form.username.label_tag }}  {{form.username}}
 
+                            <div class="card-body">
+                                <form class="user" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            {{ form.first_name.label_tag }} {{ form.first_name }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ form.last_name.label_tag }} {{ form.last_name }}
+                                        </div>
                                     </div>
-                                    
-                                </div>
-                                <div class="form-group row">
-                                    
-                                    <div class="col-sm-6 ">
-                                        {{ parent_add.municipality.label_tag }}  {{parent_add.municipality}}
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            {{ form.email.label_tag }} {{ form.email }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ form.username.label_tag }} {{ form.username }}
+                                        </div>
                                     </div>
-                                    
-                                    <div class="col-sm-6 ">
-                                        {{ parent_add.administrative_post.label_tag }}  {{parent_add.administrative_post}}
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            {{ parent_add.municipality.label_tag }} {{ parent_add.municipality }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ parent_add.administrative_post.label_tag }} {{ parent_add.administrative_post }}
+                                        </div>
                                     </div>
-                                  
-                                </div>
-                                <div class="form-group row">
-
-                                       
-                                    <div class="col-sm-6 ">
-                                        {{ parent_add.suco.label_tag }}  {{parent_add.suco}}
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            {{ parent_add.suco.label_tag }} {{ parent_add.suco }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ parent_add.village.label_tag }} {{ parent_add.village }}
+                                        </div>
                                     </div>
-
-                                    <div class="col-sm-6 ">
-                                        {{ parent_add.village.label_tag }}  {{parent_add.village}}
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <button class="btn btn-info btn-user btn-block border-none">Rejistu</button>
+                                        </div>
                                     </div>
-                                  
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <div class="col-sm-3">
-                                        <button class="btn btn-primary btn-user btn-block">Rejistu</button>
-                                    </div>
-                                </div>
-                               
-                                
-                                <hr>
-                                {% comment %} <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Register with Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                                </a> {% endcomment %}
-                            </form>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="forgot-password.html">Haluan Password?</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" href="{%url 'login'%}">Iha ona Konta? Login!</a>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="card-footer">
+                    <div class="text-center">
+                        <a class="small" href="#">Haluan Password?</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="small" href="{%url 'login'%}">Iha ona konta familia? Login!</a>
+                    </div>
+                </div>
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; WorlMosaic Ed Tech 2024</span>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
-      
     </div>
-</body>
+ 
+    {% include './js.html' %} <!-- Ensure the correct path to your 'js.html' file -->
 
-{%include './js.html' %}
+</body>
 
 </html>
