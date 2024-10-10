@@ -10,8 +10,10 @@ from .models import Student
 def all_child(request):
     all_child = Student.objects.all()
     context ={
-        'parents ': all_child
+        'student': all_child,
+        'child' : Student.objects.all().count()
     }
+    print(context)
     templates_render ='admin_report/all_child.html'
 
-    return render(request, context=context, template_name=templates_render)
+    return render(request,template_name=templates_render, context=context )

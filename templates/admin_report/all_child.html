@@ -10,7 +10,7 @@
               <div
                 class="text-xs font-weight-bold text-primary text-uppercase mb-1"
               >
-                Total Labarik rejistadu
+                Total Labarik rejistadu 
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">{{child}}</div>
             </div>
@@ -108,7 +108,7 @@
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3 border-bottom-info">
-      <h6 class="m-0 font-weight-bold text-primary">Lista Parentes</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Lista Labarik Sira</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -136,11 +136,11 @@
                         </tr>
                     </tfoot> -->
           <tbody>
-            {% for parent in parents %}
+            {% for students in student %}
             <tr>
-              <td>{{parent.first_name}} {{parent.last_name}}</td>
-              <td>{{parent.phone}}</td>
-              <td>{{parent.email}}</td>
+              <td>{{students.first_name}} {{students.last_name}}</td>
+              <td>{{students.year_birth }}</td>
+              <td>{{students.parent}}</td>
             </tr>
             {% endfor %}
           </tbody>

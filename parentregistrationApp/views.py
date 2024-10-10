@@ -361,6 +361,6 @@ class PhoneValidation(View):
     # print(message)
     # # Render the message in the 'municipality/phone.html' template
     # return render(request, 'municipality/phone.html', {'message': message})
-def all_child(request):
-    student = Student.objects.all()
-    return render(request, 'municipality/home.html', {'student': student})
+# def all_child(request):
+#     student = Student.objects.all()
+#     return render(request, 'municipality/home.html', {'student': student})
