@@ -41,54 +41,36 @@ class ParentForm(forms.ModelForm):
     first_name = forms.CharField(
         label="Naran Dahuluk",
         widget=forms.TextInput(attrs={'class': 'form-control',
-                
-                                      'placeholder': "Naran Primeiro",
-                                     }),
-        #help_text="Phone number must start with +670 and have 8 digits starting with 7."
+                                      'placeholder': "Naran Primeiro"}),
     )
     last_name = forms.CharField(
         label="Naran Ikus",
         widget=forms.TextInput(attrs={'class': 'form-control',
-                
-                                      'placeholder': "Naran Ikus",
-                                     }),
-       # help_text="Phone number must start with +670 and have 8 digits starting with 7."
+                                      'placeholder': "Naran Ikus"}),
     )
-
-    # email = forms.CharField(
-    #     label="Email",
-    #     widget=forms.TextInput(attrs={'class': 'form-control',
-                
-    #                                   'placeholder': "Email",
-    #                                  }),
-    #    # help_text="Phone number must start with +670 and have 8 digits starting with 7."
-    # )
-    # def __init__(self, *args, **kwargs):
-    #         super(User, self).__init__(*args, **kwargs)
-    #         self.fields['email'].required = False
-
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
-        labels ={
-            'email':'Email'
+        labels = {
+            'email': 'Email'
         }
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder':'jcosta@yahoo.com'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'jcosta@yahoo.com'}),
         }
-
-        def __init__(self, *args, **kwargs):
-            super(User, self).__init__(*args, **kwargs)
-            self.fields['email'].required = False
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
         pattern = re.compile(r'^\+6707\d{7}$')
         if not pattern.match(username):
             raise ValidationError("Phone number must start with +670 and have 8 digits starting with 7.")
+
+        # Check if the username (phone number) already exists
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("This phone number is already taken.")
+
         return username
 
     def save(self, commit=True):
@@ -99,7 +81,7 @@ class ParentForm(forms.ModelForm):
         user.set_password(password)  # Set the generated password
 
         if commit:
-            user.save()  # Make sure the user is saved to the database
+            user.save()  # Save the user to the database
 
             # Send the OTP (password) to the user's phone number
             message = f"Your account has been created. Username: {user.username}, Password: {password}"

@@ -77,6 +77,10 @@ class Login_View(LoginView):
             return resolve_url('parent-dashboard')
         return super().get_success_url()
     
+    def form_invalid(self, form):
+        messages.error(self.request, "Kredensiais la diak. Tenta fali.")
+        return super().form_invalid(form)
+    
 class Logout_View(View):
     def get(self,request):
         logout(self.request)
@@ -357,6 +361,6 @@ class PhoneValidation(View):
     # print(message)
     # # Render the message in the 'municipality/phone.html' template
     # return render(request, 'municipality/phone.html', {'message': message})
-# def home(request):
-#     villages = Village.objects.all()
-#     return render(request, 'municipality/home.html', {'villages': villages})
+def all_child(request):
+    student = Student.objects.all()
+    return render(request, 'municipality/home.html', {'student': student})

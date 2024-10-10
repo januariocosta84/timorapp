@@ -37,12 +37,12 @@
       <span>Menu</span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
+      <div class="bg-white py-2 collapse-inner border-bottom-info">
         <h6 class="collapse-header">Menus</h6>
         
         {% comment %} {% if 'Administrator' in user_groups %} {% endcomment %}
           <a class="collapse-item" href="{%url 'all-parents'%}">
-            <i class="fas fa-users text-gray-300"></i>
+            <i class="fas fa-users mr-2"></i>
             Lista Parentes
           </a>
           {% comment %} <a class="collapse-item" href="#">Notisias</a>
@@ -67,9 +67,9 @@
       <span>Jestaun Utilizadores</span>
     </a>
     <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
+      <div class="bg-white py-2 collapse-inner border-bottom-info">
         <h6 class="collapse-header">Utilizadores:</h6>
-        <a class="collapse-item" href="#">Kria Utilizador Foun</a>
+        <a class="collapse-item" href="#"> <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Kria Utilizador Foun</a>
         {% comment %} 
         <a class="collapse-item" href="{% url 'list_news' %}">Kria Group Foun</a> 
         {% endcomment %}
@@ -92,15 +92,15 @@
         <span>Buka</span>
     </a>
     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
+        <div class="bg-white py-2 collapse-inner border-bottom-info">
             <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="#">Login</a>
+            <a class="collapse-item" href="#"> Login</a>
             <a class="collapse-item" href="#">Register</a>
             <a class="collapse-item" href="#">Forgot Password</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Other Pages:</h6>
             <a class="collapse-item" href="#">404 Page</a>
-            <a class="collapse-item" href="#">Blank Page</a>
+            <a class="collapse-item" href="#"> <i class="fa-solid fa-circle-info"></i>Blank Page</a>
         </div>
     </div>
 </li>

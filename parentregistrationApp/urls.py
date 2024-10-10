@@ -48,7 +48,9 @@ urlpatterns = [
     path('load-sucos/', list_suco, name='load-sucos'),
     path('load-village/', list_village, name='load-village'),
     path('load-num/',PhoneValidation.as_view(), name ='load-num'),
+    
     path('parents/', all_parents, name='all-parents'),
+    path('all-student/', all_child, name='all-student'),
    #path('load-municipalities/', load_municipalities, name='load-municipalities'),
    
 

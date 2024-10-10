@@ -10,8 +10,8 @@ from .models import Student
 def all_child(request):
     all_child = Student.objects.all()
     context ={
-        'all_child ': all_child
+        'parents ': all_child
     }
-    templates_render ='admin_report/admin_report.html'
+    templates_render ='admin_report/all_child.html'
 
     return render(request, context=context, template_name=templates_render)
