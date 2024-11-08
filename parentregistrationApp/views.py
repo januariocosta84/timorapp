@@ -91,12 +91,7 @@ def registration_parent_view(request):
     if request.method == 'POST':
         add_form = AddressForm(request.POST)
         form = ParentForm(request.POST)
-        parent_add = ParentFormRegist(request.POST)
-        
-        # Debugging prints
-        print("Bug", parent_add.is_valid())
-        print("Second bug", form.is_valid())
-        
+        parent_add = ParentFormRegist(request.POST)        
         if form.is_valid() and parent_add.is_valid():
             user = form.save()
             parent = Parent.objects.get(user=user)
@@ -157,6 +152,8 @@ def parent_home(request):
             student = form.save(commit=False)
             student.parent = parent
             student.save()
+            messages.success(request, "Adisiona Profile Labarik ho susesu")
+            print("hello")
             return redirect('parent-dashboard')
         
         """Edit Parent Logic"""
@@ -192,18 +189,34 @@ def parent_home(request):
 
     return render(request, 'parent/home_parent.html', context=context)
 
+# def student_edit_view(request, id):
+#     student = get_object_or_404(Student, id=id)
+#     if request.method == 'POST':
+#         form = StudentForm(request.POST, instance=student)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request,"Naran labarik update ho susesu!")
+#             return redirect('parent-dashboard')
+#     else:
+#         form = StudentForm(instance=student)
+#         return render(request, 'childreen/student_edit.html', {'form_edit': form})
 def student_edit_view(request, id):
     student = get_object_or_404(Student, id=id)
+    print("ID",student.id)
     if request.method == 'POST':
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            messages.success(request,"Naran labarik update ho susesu!")
+            messages.success(request, "Naran labarik update ho susesu!")
             return redirect('parent-dashboard')
+        else:
+            return render(request, 'childreen/student_edit_form.html', {'form_edit': form, 'id':student.id})
     else:
         form = StudentForm(instance=student)
-        return render(request, 'childreen/student_edit.html', {'form_edit': form})
-
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(request, 'childreen/student_edit.html', {'form_edit': form,'id':student.id})
+        return redirect('parent-dashboard')
+    
 
 def student_delete_view(request, id):
     student = get_object_or_404(Student, id=id)

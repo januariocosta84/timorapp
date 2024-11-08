@@ -26,7 +26,7 @@ from .report import all_child
 from django.urls import path
 urlpatterns = [
     path('', parent_home, name ='parent-dashboard'),
-    path('send-otp/', send_otp_view, name='send_otp'),
+  #  path('send-otp/', send_otp_view, name='send_otp'),
     path('verify-otp/', otp_verify, name='verify_otp'),
     path('parent-regist/', registration_parent_view, name='regist'),
     path('login/', Login_View.as_view(), name='login'),

@@ -6,9 +6,9 @@ from django.dispatch import receiver
 import uuid
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+import re
+
 User = get_user_model()
-
-
 class Village(models.Model):
     name = models.CharField(max_length=250)
     suco = models.ForeignKey('Suco', on_delete=models.CASCADE, null=True, blank=True)
@@ -66,9 +66,6 @@ class Parent(models.Model):
     def __str__(self):
         return self.full_name or f"{self.first_name} {self.last_name}"
 
-
-import re
-
 class Parentcode(models.Model):
     code = models.CharField(max_length=250, unique=True, editable=False)
     parent = models.OneToOneField(Parent, on_delete=models.CASCADE, related_name='auth')
@@ -88,7 +85,6 @@ class Parentcode(models.Model):
 
     def __str__(self):
         return str(self.code)
-    
 
 
 class Student(models.Model):
@@ -132,7 +128,6 @@ def create_auth_parent(sender, instance, created, **kwargs):
         instance.save()
         #AuthParent.objects.create(parent=instance)
         Parentcode.objects.create(parent=instance, phone=instance.phone)
-
 
 @receiver(post_save, sender=Parent)
 def save_full_name(sender, instance, **kwargs):
