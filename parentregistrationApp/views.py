@@ -201,8 +201,10 @@ def parent_home(request):
 #         form = StudentForm(instance=student)
 #         return render(request, 'childreen/student_edit.html', {'form_edit': form})
 def student_edit_view(request, id):
+    print("id", id)
     student = get_object_or_404(Student, id=id)
     print("ID",student.id)
+    print(student.first_name)
     if request.method == 'POST':
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
@@ -213,6 +215,7 @@ def student_edit_view(request, id):
             return render(request, 'childreen/student_edit_form.html', {'form_edit': form, 'id':student.id})
     else:
         form = StudentForm(instance=student)
+        print(form)
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return render(request, 'childreen/student_edit.html', {'form_edit': form,'id':student.id})
         return redirect('parent-dashboard')

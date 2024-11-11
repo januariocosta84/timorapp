@@ -94,7 +94,11 @@ class Student(models.Model):
     year_birth = models.IntegerField()
 
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
-
+    def save(self, *args, **kwargs):
+        # Automatically populate the full_name field with first_name and last_name
+        if not self.full_name:
+            self.full_name = f"{self.first_name} {self.last_name}"
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.full_name or f"{self.first_name} {self.last_name}"
 
@@ -102,14 +106,16 @@ class StudentCode(models.Model):
     code = models.CharField(max_length=250, unique=True, editable=False)
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='code')
 
-    def save(self, *args, **kwargs):
-        if not self.code:
-            first_name_part = self.student.first_name[:2].upper()
-            last_name_part = self.student.last_name[:2].upper()
-            self.code = f"{first_name_part}{last_name_part}{self.student.id}"
-        super().save(*args, **kwargs)
     def __str__(self):
         return str(self.code)
+
+@receiver(post_save, sender=Student)
+def create_or_update_student_code(sender, instance, created, **kwargs):
+    if created or not hasattr(instance, 'code'):
+        first_name_part = instance.first_name[:2].upper()
+        last_name_part = instance.last_name[:2].upper()
+        code = f"{first_name_part}{last_name_part}{instance.id}"
+        StudentCode.objects.update_or_create(student=instance, defaults={'code': code})
 
 class StudentActivityLog(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='activity_logs')

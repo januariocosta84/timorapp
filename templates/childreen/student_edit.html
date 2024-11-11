@@ -2,7 +2,18 @@
   {% include 'dashboard/messaging.html' %}
     <form id="studentForm" method="post" action="{%url 'edit-student' id %}">
       {% csrf_token %}
-      {{ form_edit.as_p }}
-      <button type="submit" class="btn btn-primary">Save changes</button>
+      <div class="form-group">
+        <label for="name">Naran Dahuluk</label>
+        {{form_edit.first_name}}
+      </div>
+      <div class="form-group">
+        <label for="name">Naran Ikus</label>
+        {{form_edit.last_name}}
+      </div>
+      <div class="form-group">
+        <label for="name">Tinan Moris</label>
+        {{form_edit.year_birth}}
+      </div>
+      <button type="submit" class="btn btn-primary">Atualiza</button>
     </form>
 {%endblock%}
