@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, HttpResponse, resolve_url
 from django.urls import reverse
 from django.views.generic.base import View
-from .otp_conf import sentotp
+#from .otp_conf import sentotp
 from django.contrib import messages
 from .models import(   AdministrativePost, 
                         Municipality, Parent,
@@ -37,7 +37,7 @@ def send_otp_view(request):
             print("Parent code retrieved:", parent_code)  # Debug print
 
             # Sending the OTP
-            sentotp(phone_numb, parent_code.code)
+           # sentotp(phone_numb, parent_code.code)
             messages.success(request, 'OTP code has been sent to your phone number.')
             return redirect('verify_otp')  # Replace with your actual success page or URL pattern
         except Parentcode.DoesNotExist:
@@ -230,7 +230,18 @@ def student_delete_view(request, id):
         return JsonResponse({'redirect': True, 'url': '/'})
 
     #return redirect('parent-dashboard')
+def delete_student_view(request, id):
+    if request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest":
+        student = get_object_or_404(Student, id=id)
+        student_name = student.first_name
+        student.delete()
+        return JsonResponse({
+            "message": f"{student_name} has been deleted from the database.",
+            "redirect": True,
+            "url": "/"
+        }, status=200)
 
+    return JsonResponse({"error": "Invalid request."}, status=400)
 
 def reset_password(request):
     id = request.user.id

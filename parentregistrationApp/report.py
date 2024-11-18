@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, HttpResponse, resolve_url
 from django.urls import reverse
 from django.views.generic.base import View
-from .otp_conf import sentotp
+#from .otp_conf import sentotp
 from django.contrib import messages
 from .models import Student
 

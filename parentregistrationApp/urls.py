@@ -1,4 +1,4 @@
-from .views import( PhoneValidation, list_suco, list_village, 
+from .views import( PhoneValidation, delete_student_view, list_suco, list_village, 
                    register_student_view, 
                    student_edit_view,
                    send_otp_view, otp_verify, 
@@ -42,7 +42,8 @@ urlpatterns = [
     path('student-add/<int:id>/',register_student_view, name='add-student'),
     path('student-edit/<int:id>/', student_edit_view,name ='edit-student'),
     path('student-delete/<int:id>/', student_delete_view,name ='delete-student'),
-
+    
+    path('student-deletes/<int:id>/', delete_student_view,name ='deletes-student'),
     path('students/parent/', parent_home, name='parent-dash'),
     path('load-administrative-posts/', list_posto_administrative, name='load-administrative-posts'),
     path('load-sucos/', list_suco, name='load-sucos'),

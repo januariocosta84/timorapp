@@ -81,7 +81,7 @@
                           {{student.id}}
                         </td>
                         <td>
-                          <a href="#" class="text-body">{{student.first_name }} {{student.last_name }}</a>
+                          <a href="#" class="text-body" >{{student.first_name }} {{student.last_name }}</a>
                         </td>
                         <td>{{student.code.code}}</td>
                         <td>{{student.year_birth}}</td>
@@ -90,7 +90,7 @@
                             <!-- Edit button  -->
                             <a 
                             href="{% url 'edit-student' student.id %}" 
-                            class="btn btn-info" data-toggle="modal", data-target="#editStudentModal" onclick="loadEditForm({{ student.id }})">
+                            class="btn btn-info" data-toggle="modal", data-target="#editStudentModal", onclick= "loadEditForm({{student.id}})">
                             Editar
                             </a>
                           
@@ -102,6 +102,8 @@
                              class="btn btn-danger btn-circle btn-md">
                               <i class="fas fa-trash"></i>
                             </a> 
+
+                            <a href="" class="delete-student-link" data-toggle="modal", data-target="#DeletedStudentModal " data-id="{{student.id}}" id="studentID">Deleted Student Modal</a>
                           </td>
                         </td> <!-- This closing tag is incorrect -->
                         
@@ -154,6 +156,29 @@
   </div>
 </div>
 
+
+<!--Deleted Modal-->
+<div class="modal fade" id="DeletedStudentModal" tabindex="-1" role="dialog" aria-labelledby="DeletedStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeletedStudentModalLabel">Delete Student</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <p>Are you sure you want to delete <strong id="student-name"></strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
+        <button id="confirmDelete" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
     document.body.addEventListener('htmx:configRequest', (event) => {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -203,7 +228,53 @@
 
 
 </script>
-  
-  
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+      let studentId; // Variable to store the student ID
+
+      // When the modal is triggered, populate it with student details
+      $('.delete-student-link').on('click', function (event) {
+          event.preventDefault(); // Prevent the default anchor behavior
+
+          studentId = $(this).data('id'); // Get the student ID from the data attribute
+          const studentName = $(this).data('name'); // Get the student name from the data attribute
+          console.log("ID:",studentId)
+          // Update the modal content
+          $('#student-name').text(studentName);
+
+          // Show the modal
+          $('#DeletedStudentModal').modal('show');
+      });
+
+      // Handle delete confirmation button click
+      $('#confirmDelete').on('click', function () {
+          const url = `/student-deletes/${studentId}/`; // Construct the deletion URL
+
+          $.ajax({
+            url: url ,
+            type: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }, // Include CSRF token
+            success: function (response) {
+                if (response.redirect) {
+                    // Redirect to the provided URL
+                    alert(response.message);
+                    window.location.href = response.url;
+                } else {
+                    // Optionally handle other success scenarios
+                    alert(response.message);
+                }
+            },
+    error: function (xhr) {
+        // Handle error response
+        alert("An error occurred: " + xhr.responseJSON.error);
+    }
+});
+      });
+  });
+</script>
+
 
   
