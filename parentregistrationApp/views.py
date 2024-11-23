@@ -387,7 +387,7 @@ def check_phone_number(request):
     if phone:
         exists = Parent.objects.filter(phone=phone).exists()
         print("Exist", exists)
-        return JsonResponse({'exists': exists})
+        return JsonResponse({'exists': exists, 'phone':phone})
     return JsonResponse({'error': 'Phone number not provided'}, status=400)
 
     #     # Phone number is taken

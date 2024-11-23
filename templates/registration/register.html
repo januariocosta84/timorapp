@@ -49,7 +49,7 @@
                                         <div class="col-sm-6">
                                             {{ form.username.label_tag }} {{ form.username }}
                                             <small id="phone-error" style="color: red; display: none;">
-                                                Phone number already exists.Pleas try another number
+                                                Phone number already exists.Pleas try another number 
                                             </small>
                                             
                                         </div>
@@ -115,8 +115,10 @@
         fetch(`/check-phone/?phone=${phone}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 if (data.exists) {
                     errorDisplay.style.display = 'block';
+                    console.log(data.phone)
                     submitButton.disabled = true;
                 } else {
                     errorDisplay.style.display = 'none';
