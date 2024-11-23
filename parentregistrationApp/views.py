@@ -108,6 +108,7 @@ def registration_parent_view(request):
     
     else:
         form = ParentForm()
+        print(form)
         parent_add = ParentFormRegist()
         add_form = AddressForm()
 
@@ -236,7 +237,7 @@ def delete_student_view(request, id):
         student_name = student.first_name
         student.delete()
         return JsonResponse({
-            "message": f"{student_name} has been deleted from the database.",
+            "message": f"{student_name}'s Name has been deleted from the database.",
             "redirect": True,
             "url": "/"
         }, status=200)
@@ -379,6 +380,15 @@ class PhoneValidation(View):
         else:
             return HttpResponse("<p class='errors' id='emailError'></p> \
                 <button type='submit' class='btn btn-primary' id='submitBtn'>Submit</button> ")
+
+def check_phone_number(request):
+    phone = request.GET.get('phone', None)
+    print(phone)
+    if phone:
+        exists = Parent.objects.filter(phone=phone).exists()
+        print("Exist", exists)
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'error': 'Phone number not provided'}, status=400)
 
     #     # Phone number is taken
     #     message = True

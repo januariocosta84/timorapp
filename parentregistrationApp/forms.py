@@ -29,13 +29,15 @@ class LoginForm(AuthenticationForm):
 class ParentForm(forms.ModelForm):
     username = forms.CharField(
         label="Numeru Telephone",
-        widget=forms.TextInput(attrs={'class': 'form-control',
-                                      'hx-post': reverse_lazy('load-num'),
-                                      'placeholder': "Numeru telfone",
-                                      'hx-trigger': 'change',
-                                      'hx-target': '#phoneError',
-                                      'hx-indicator': '#loading',
-                                      'hx-swap': 'innerHTML'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+                                   
+            'placeholder': "Numeru telfone",
+                                    #  'hx-trigger': 'change',
+                                     # 'hx-target': '#phoneError',
+                                     # 'hx-indicator': '#loading',
+                                     # 'hx-swap': 'innerHTML'}),
+                                }),
         help_text="Phone number must start with +670 and have 8 digits starting with 7."
     )
     first_name = forms.CharField(

@@ -1,4 +1,4 @@
-from .views import( PhoneValidation, delete_student_view, list_suco, list_village, 
+from .views import( PhoneValidation, check_phone_number, delete_student_view, list_suco, list_village, 
                    register_student_view, 
                    student_edit_view,
                    send_otp_view, otp_verify, 
@@ -52,6 +52,8 @@ urlpatterns = [
     
     path('parents/', all_parents, name='all-parents'),
     path('all-student/', all_child, name='all-student'),
+
+    path('check-phone/', check_phone_number, name='check-phone'),
    #path('load-municipalities/', load_municipalities, name='load-municipalities'),
    
 
