@@ -10,9 +10,18 @@ from twilio.rest import Client
 import random
 import string
 from django.core.exceptions import ValidationError
-# Current date and time
 import datetime
 import os
+import re
+from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
+from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
+import json
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file
+load_dotenv()
 
 now = datetime.datetime.now()
 
@@ -86,82 +95,37 @@ class ParentForm(forms.ModelForm):
             user.save()  # Save the user to the database
 
             # Send the OTP (password) to the user's phone number
-            message = f"Your account has been created. Username: {user.username}, Password: {password}"
+            message = f": {password}"
             print(message)
             send_otp(user.username, message)  # Assuming username is the phone number
-
         return user
-def send_otp(phone_number, otp_code):
-    # Use environment variables for sensitive data
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "")
+
+def send_otp(phone_number, message):
+    account_sid = os.getenv('ACCOUNT_SID')
+    auth_token = os.getenv('AUTH_TOKEN')
+    from_number = os.getenv('FROM_WHATSAPP_NUMBER')
+    content_sid = os.getenv('CONTENT_SID')
+
     client = Client(account_sid, auth_token)
-
+    phone_number = f"whatsapp:{phone_number}"
+    
     try:
-        # Ensure the phone number has the correct format (with country code)
-        if not re.match(r"^\+\d{10,15}$", phone_number):
-            raise ValueError("Invalid phone number format. It must include the country code.")
-
-        # Create the OTP verification request using the actual phone number
-        message = client.verify \
-                        .v2 \
-                        .services('VA2174049af7d730392b6bb2246fb9094c') \
-                        .verifications \
-                        .create(to=phone_number, channel='sms')
-
-        return message.sid  # Returning message SID for further tracking/logging
+        message = client.messages.create(
+            from_=from_number,
+            to=phone_number,
+            content_sid=content_sid,
+            content_variables=json.dumps(
+                {
+                    "1": phone_number,
+                    "2": message,
+                }
+            ),
+        )
+        print(f"Message sent successfully. SID: {message.sid}")
+        print(message.body)
     except Exception as e:
-        print(f"Failed to send OTP: {str(e)}")
-        return None
-
-# class ParentForm(UserCreationForm):
-#     username = forms.CharField(
-#         label="Phone number", 
-#         widget=forms.TextInput(attrs={'class': 'form-control',
-#                             'hx-post':reverse_lazy('load-num'),  # Changed to hx-get and using reverse
-#                             'placeholder': "Numeru telfone",
-#                             'hx-trigger': 'change', 
-#                             'hx-target': '#phoneError',
-#                             'hx-indicator': '#loading',
-#                             'hx-swap': 'innerHTML'}),
-#         help_text="Phone number must start with +670 and have 8 digits starting with 7."
-#     )
-#     password1 = forms.CharField(
-#         label="Password", 
-#         widget=forms.PasswordInput(attrs={'class': 'form-control'})
-#     )
-#     password2 = forms.CharField(
-#         label="Confirm Password", 
-#         widget=forms.PasswordInput(attrs={'class': 'form-control'})
-#     )
-
-#     class Meta(UserCreationForm.Meta):
-#         model = User
-#         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
-#         widgets = {
-#             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-#             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-#             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-
-#         }
-
-#     def __init__(self, *args, **kwargs):
-#         super(ParentForm, self).__init__(*args, **kwargs)
-#         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-
-#     def clean_username(self):
-#         username = self.cleaned_data.get('username')
-#         pattern = re.compile(r'^\+6707\d{7}$')
-#         if not pattern.match(username):
-#             raise ValidationError("Phone number must start with +670 and have 8 digits starting with 7.")
-#         return username  
-#     # def __init__(self, *args, **kwargs):
-#     #     super(ParentForm, self).__init__(*args, **kwargs)
-#     #     self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-#     #     self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-
-
+        print(f"Error: {e}")
+        
 
 class ParentFormRegist(forms.ModelForm):
     class Meta:
