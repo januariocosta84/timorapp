@@ -1,7 +1,6 @@
-<!-- send_otp.html -->
-<form method="POST">
-    {% csrf_token %}
-    <label for="phone">Phone Number:</label>
-    <input type="text" name="phone" id="phone" required>
-    <button type="submit">Send OTP</button>
+<form method="POST" action="{% url 'reset_password_sms' %}">
+  {% csrf_token %}
+  <label for="phone_number">Enter Your Phone Number:</label>
+  <input type="text" id="phone_number" name="phone_number" required />
+  <button type="submit">Reset Password</button>
 </form>

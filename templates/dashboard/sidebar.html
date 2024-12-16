@@ -27,104 +27,37 @@
   <!-- Divider -->
   <hr class="sidebar-divider" />
 
-  <!-- Heading -->
+  {% if is_parent %}
+  <!-- Only visible to Parents -->
   <div class="sidebar-heading">Interface</div>
-
-  <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+    <a
+      class="nav-link collapsed"
+      href="#"
+      data-toggle="collapse"
+      data-target="#collapseTwo"
+      aria-expanded="true"
+      aria-controls="collapseTwo"
+    >
       <i class="fas fa-fw fa-cog"></i>
       <span>Menu</span>
     </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div
+      id="collapseTwo"
+      class="collapse"
+      aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar"
+    >
       <div class="bg-white py-2 collapse-inner border-bottom-info">
         <h6 class="collapse-header">Menus</h6>
-        
-        {% comment %} {% if 'Administrator' in user_groups %} {% endcomment %}
-          <a class="collapse-item" href="{%url 'all-parents'%}">
-            <i class="fas fa-users mr-2"></i>
-            Lista Parentes
-          </a>
-          <a class="collapse-item" href="{%url 'all-student'%}">
-            <i class="fas fa-child mr-2"></i>
-            Lista Labarik sira
-          </a>
-          {% comment %} <a class="collapse-item" href="#">Notisias</a>
-          <a class="collapse-item" href="#">Leis, decretos, Despacho</a>
-          <a class="collapse-item" href="#">Kria Foto Gallery Militar</a>
-          <a class="collapse-item" href="#">Kria Foto Sturutura FDTL</a>
-          <a class="collapse-item" href="#">Kria Foto Slider FDTL</a> {% endcomment %}
-        {% comment %} {% elif 'Media' in user_groups %} {% endcomment %}
-          {% comment %} <a class="collapse-item" href="#">Notisias</a> {% endcomment %}
-        {% comment %} {% elif 'Procurement' in user_groups %} {% endcomment %}
-          {% comment %} <a class="collapse-item" href="#">Pajinas</a> {% endcomment %}
-        {% comment %} {% endif %} {% endcomment %}
+        <a class="collapse-item" href="{% url 'all-parents' %}"
+          ><i class="fas fa-users mr-2"></i> Lista Parentes</a
+        >
+        <a class="collapse-item" href="{% url 'all-student' %}"
+          ><i class="fas fa-child mr-2"></i> Lista Labarik sira</a
+        >
       </div>
     </div>
   </li>
-
-  <!-- Nav Item - Utilities Collapse Menu -->
-  {% comment %} {% if 'Administrator' in user_groups %} {% endcomment %}
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-      <i class="fas fa-fw fa-wrench"></i>
-      <span>Jestaun Utilizadores</span>
-    </a>
-    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner border-bottom-info">
-        <h6 class="collapse-header">Utilizadores:</h6>
-        <a class="collapse-item" href="#"> <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Kria Utilizador Foun</a>
-        {% comment %} 
-        <a class="collapse-item" href="{% url 'list_news' %}">Kria Group Foun</a> 
-        {% endcomment %}
-      </div>
-    </div>
-  </li>
-  {% comment %} {% endif %} {% endcomment %}
-
-  <!-- Divider -->
-  <hr class="sidebar-divider" />
-  <div class="sidebar-heading">
-    Relatorio
-</div>
-
-<!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-        aria-expanded="true" aria-controls="collapsePages">
-        <i class="fas fa-fw fa-search"></i>
-        <span>Buka</span>
-    </a>
-    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner border-bottom-info">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="#"> Login</a>
-            <a class="collapse-item" href="#">Register</a>
-            <a class="collapse-item" href="#">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="#">404 Page</a>
-            <a class="collapse-item" href="#"> <i class="fa-solid fa-circle-info"></i>Blank Page</a>
-        </div>
-    </div>
-</li>
-
-<!-- Nav Item - Charts -->
-<li class="nav-item">
-    <a class="nav-link" href="#">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span>Grafiku</span></a>
-</li>
-
-<!-- Nav Item - Tables -->
-<li class="nav-item">
-    <a class="nav-link" href="#">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Tabelas</span></a>
-</li>
-
-  <!-- Sidebar Toggler (Sidebar) -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
+  {% endif %}
 </ul>

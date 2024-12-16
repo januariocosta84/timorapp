@@ -1,138 +1,152 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-<head>
+    <title>Formuláriu rejistu parentes</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    {% include './css.html' %}
+    <!-- Ensure the correct path to your 'css.html' file -->
+  </head>
 
-    <title>Parent Registration Form</title>
-   
-    {% include './css.html' %} <!-- Ensure the correct path to your 'css.html' file -->
-</head>
-
-<body class="bg-gradient-info">
-    
+  <body class="bg-gradient-info">
     <div class="container">
-        <div class="card o-hidden border-none shadow-lg my-5 bg-gradient border-bottom-info">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-12">
-                        <div class="p-5">
-                           
-                            <div class="text-muted text-uppercase card-header border-bottom-info">
-                                <h1 class="h4 text-gray-900 mb-4">Kria Konta Foun!</h1>
-                            </div>
+      <div
+        class="card o-hidden border-none shadow-lg my-5 bg-gradient border-bottom-info"
+      >
+        <div class="card-body p-0">
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+            <div class="col-lg-12">
+              <div class="p-5">
+                <div
+                  class="text-muted text-uppercase card-header border-bottom-info"
+                >
+                  <h1 class="h4 text-gray-900 mb-4">Kria Konta Foun!</h1>
+                </div>
 
-                            <div class="card-body">
-                                {% include 'dashboard/messaging.html'%}
-                                <form class="user" method="POST">
-                                    {% csrf_token %}
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            {{ form.first_name.label_tag }} {{ form.first_name }}
-                                        </div>
-                                        <div class="col-sm-6">
-                                            {{ form.last_name.label_tag }} {{ form.last_name }}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            {{ form.email.label_tag }} {{ form.email }}
-                                        </div>
-                                        <div class="col-sm-6">
-                                            {{ form.username.label_tag }} {{ form.username }}
-                                            <small id="phone-error" style="color: red; display: none;">
-                                                Phone number already exists.Pleas try another number 
-                                            </small>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            {{ parent_add.municipality.label_tag }} {{ parent_add.municipality }}
-                                        </div>
-                                        <div class="col-sm-6">
-                                            {{ parent_add.administrative_post.label_tag }} {{ parent_add.administrative_post }}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            {{ parent_add.suco.label_tag }} {{ parent_add.suco }}
-                                        </div>
-                                        <div class="col-sm-6">
-                                            {{ parent_add.village.label_tag }} {{ parent_add.village }}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-3">
-                                            <button class="btn btn-info btn-user btn-block border-none" id="submit-button">Rejistu</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                <div class="card-body">
+                  {% include 'dashboard/messaging.html'%}
+                  <form class="user" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form.first_name.label_tag }} {{ form.first_name }}
+                      </div>
+                      <div class="col-sm-6">
+                        {{ form.last_name.label_tag }} {{ form.last_name }}
+                      </div>
                     </div>
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                        {{ form.email.label_tag }} {{ form.email }}
+                      </div>
+                      <div class="col-sm-6">
+                        {{ form.username.label_tag }} {{ form.username }}
+                        <small
+                          id="phone-error"
+                          style="color: red; display: none"
+                        >
+                          Phone number ida ne'e rejistadu ona!
+                        </small>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                        {{ parent_add.municipality.label_tag }}
+                        {{parent_add.municipality }}
+                      </div>
+                      <div class="col-sm-6">
+                        {{ parent_add.administrative_post.label_tag }}
+                        {{parent_add.administrative_post }}
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                        {{ parent_add.suco.label_tag }} {{ parent_add.suco }}
+                      </div>
+                      <div class="col-sm-6">
+                        {{ parent_add.village.label_tag }}
+                        {{parent_add.village}}
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-3">
+                        <button class="btn btn-info" id="submit-button">
+                          Rejistu
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                
-                <div class="card-footer">
-                    <div class="text-center">
-                        <a class="small" href="#">Haluan Password?</a>
-                    </div>
-                    <div class="text-center">
-                        <a class="small" href="{%url 'login'%}">Iha ona konta familia? Login!</a>
-                    </div>
-                </div>
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; WorlMosaic Ed Tech 2024</span>
-                        </div>
-                    </div>
-                </footer>
+              </div>
             </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="text-center">
+              <a class="small" href="{%url 'reset_password_sms'%}"
+                >Haluan Password?</a
+              >
+            </div>
+            <div class="text-center">
+              <a class="small" href="{%url 'login'%}"
+                >Iha ona konta familia? Login!</a
+              >
+            </div>
+          </div>
+          <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+              <div class="copyright text-center my-auto">
+                <span>Copyright &copy; WorlMosaic Ed Tech 2024</span>
+              </div>
+            </div>
+          </footer>
         </div>
+      </div>
     </div>
- 
-    {% include './js.html' %} <!-- Ensure the correct path to your 'js.html' file -->
 
-</body>
-<script>
-    const phoneInput = document.getElementById('id_username');
-    const errorDisplay = document.getElementById('phone-error');
-    const submitButton = document.getElementById('submit-button');
+    {% include './js.html' %}
+    <!-- Ensure the correct path to your 'js.html' file -->
+  </body>
+  <script>
+    const phoneInput = document.getElementById("id_username");
+    const errorDisplay = document.getElementById("phone-error");
+    const submitButton = document.getElementById("submit-button");
 
-    phoneInput.addEventListener('input', () => {
-    const phone = encodeURIComponent(phoneInput.value); // Properly encode the phone number
+    phoneInput.addEventListener("input", () => {
+      const phone = encodeURIComponent(phoneInput.value); // Properly encode the phone number
 
-    if (phone) {
+      if (phone) {
         fetch(`/check-phone/?phone=${phone}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.exists) {
-                    errorDisplay.style.display = 'block';
-                    console.log(data.phone)
-                    submitButton.disabled = true;
-                } else {
-                    errorDisplay.style.display = 'none';
-                    submitButton.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error checking phone number:', error);
-            });
-    } else {
-        errorDisplay.style.display = 'none';
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if (data.exists) {
+              errorDisplay.style.display = "block";
+              console.log(data.phone);
+              submitButton.disabled = true;
+            } else {
+              errorDisplay.style.display = "none";
+              submitButton.disabled = false;
+            }
+          })
+          .catch((error) => {
+            console.error("Error checking phone number:", error);
+          });
+      } else {
+        errorDisplay.style.display = "none";
         submitButton.disabled = false;
-    }
-});
-
-</script>
+      }
+    });
+  </script>
 </html>

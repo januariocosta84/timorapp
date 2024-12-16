@@ -1,10 +1,16 @@
+import random
+import string
 from django.contrib.auth import get_user_model, logout, update_session_auth_hash
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render,redirect, HttpResponse, resolve_url
 from django.urls import reverse
 from django.views.generic.base import View
+from django.contrib.auth.models import Group
 #from .otp_conf import sentotp
 from django.contrib import messages
+
+from parentregistrationApp.decorators import group_required
+from parentregistrationApp.twilio_conf import send_otp
 from .models import(   AdministrativePost, 
                         Municipality, Parent,
                       Parentcode, Student, 
@@ -24,13 +30,7 @@ from django.contrib.auth.decorators import login_required
 def send_otp_view(request):
     if request.method == 'POST':
         phone_numb = request.POST.get('phone')  # Use get() for safer key access
-        #phone_numb = phone_numb.strip()  # Strip any leading/trailing spaces
         print("Your phone number is:", phone_numb)  # Debug print
-
-        # if not phone_numb:
-        #     messages.error(request, "Please enter a valid phone number.")
-        #     return redirect('send_otp')  # Replace with your actual view name or URL pattern
-
         try:
             # Debug: check if the phone exists
             parent_code = User.objects.get(username=phone_numb)
@@ -56,7 +56,6 @@ def otp_verify(request):
             messages.success(request,"OTP has verified ")
             return redirect('/')
         except Parentcode.DoesNotExist:
-        
             messages.error('Invalid OTP CODE')
     return render(request, 'otp/verify_otp.html')
     
@@ -64,7 +63,6 @@ class Login_View(LoginView):
     model = get_user_model()
     form_class = LoginForm
     template_name = 'registration/login.html'
-
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             messages.success(request,"Ita Login ho susesu")
@@ -94,18 +92,23 @@ def registration_parent_view(request):
         parent_add = ParentFormRegist(request.POST)        
         if form.is_valid() and parent_add.is_valid():
             user = form.save()
+            
+             # Assign user to Parents group
+            parents_group, created = Group.objects.get_or_create(name="Parents")
+            user.groups.add(parents_group)
+            
             parent = Parent.objects.get(user=user)
             parent.municipality = parent_add.cleaned_data['municipality']
             parent.administrative_post = parent_add.cleaned_data['administrative_post']
             parent.suco = parent_add.cleaned_data['suco']
             parent.village = parent_add.cleaned_data['village']
             parent.save()
+            
             messages.success(request, "Ita nia rejistu halo ho susesu")
             return redirect('/login')
         else:
             # If forms are invalid, add error message
             messages.error(request, "Rejistu falta buat ruma ou karik. Favór, hare erro sira iha kraik.")
-    
     else:
         form = ParentForm()
         print(form)
@@ -139,13 +142,15 @@ def parent_update(request):
     return render(request, 'parent/parent_edit.html', {'form': form})
 
 @login_required
+@group_required("Parents")
 def parent_home(request):
     id = request.user.id
     parent = get_object_or_404(Parent, user=id)
     print("parent:", parent.id)
-    
+     # Check if the user is in the 'Parents' group
+    is_parent = request.user.groups.filter(name='Parents').exists()
+
     students = Student.objects.filter(parent=parent).select_related('code')
-    
     if request.method == 'POST':
         """Create New Student Logic"""
         form = StudentForm(request.POST)
@@ -156,7 +161,6 @@ def parent_home(request):
             messages.success(request, "Adisiona Profile Labarik ho susesu")
             print("hello")
             return redirect('parent-dashboard')
-        
         """Edit Parent Logic"""
         parent_edit = ParentFormUpdate(request.POST, instance=parent)
         if parent_edit.is_valid():
@@ -185,22 +189,11 @@ def parent_home(request):
         'form': form,
         'parent_edit': parent_edit,
         'chang_pass': chang_pass,
+        'is_parent': is_parent,  # Pass group membership to the template
       #  'student_form': student_edit,
     }
-
     return render(request, 'parent/home_parent.html', context=context)
 
-# def student_edit_view(request, id):
-#     student = get_object_or_404(Student, id=id)
-#     if request.method == 'POST':
-#         form = StudentForm(request.POST, instance=student)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request,"Naran labarik update ho susesu!")
-#             return redirect('parent-dashboard')
-#     else:
-#         form = StudentForm(instance=student)
-#         return render(request, 'childreen/student_edit.html', {'form_edit': form})
 def student_edit_view(request, id):
     print("id", id)
     student = get_object_or_404(Student, id=id)
@@ -216,7 +209,6 @@ def student_edit_view(request, id):
             return render(request, 'childreen/student_edit_form.html', {'form_edit': form, 'id':student.id})
     else:
         form = StudentForm(instance=student)
-        print(form)
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return render(request, 'childreen/student_edit.html', {'form_edit': form,'id':student.id})
         return redirect('parent-dashboard')
@@ -314,10 +306,7 @@ def list_village(request):
 
 def parent_update(request):
     id = request.user.id
-    print(id)
     parent = get_object_or_404(Parent, user=id)
-    print(parent.id)
-   # user = get_object_or_404(User, pk=id)
     if request.method == 'POST':
         form = ParentFormUpdate(request.POST, instance=parent)
         if form.is_valid():
@@ -371,7 +360,6 @@ def all_parents(request):
     return render(request, 'parent/all_parents.html',context=context)
 
 class PhoneValidation(View):
-
     def get(self, request, *args, **kwargs):
         username = request.GET.post("username")
         if Parent.objects.filter(phone=username).exists():
@@ -390,14 +378,24 @@ def check_phone_number(request):
         return JsonResponse({'exists': exists, 'phone':phone})
     return JsonResponse({'error': 'Phone number not provided'}, status=400)
 
-    #     # Phone number is taken
-    #     message = True
-    # else:
-    #     # Phone number is available
-    #     message = False
-    # print(message)
-    # # Render the message in the 'municipality/phone.html' template
-    # return render(request, 'municipality/phone.html', {'message': message})
-# def all_child(request):
-#     student = Student.objects.all()
-#     return render(request, 'municipality/home.html', {'student': student})
+def generate_random_password(length=8):
+    """Generate a random password."""
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+def reset_password_and_send_sms(request):
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        try:
+            user = User.objects.get(username=phone_number)
+            new_password = generate_random_password()
+            user.set_password(new_password)
+            user.save()
+            message = f'Your new password is: {new_password}'
+            send_otp(phone_number, message)
+            return JsonResponse({'status': 'success', 'message': 'Password reset haruka tena liu husi sms whatsapp.'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Numeru telfone la valido'}, status=404)
+
+    # Render the form for GET requests
+    return render(request, 'otp/password_reset_sms.html')

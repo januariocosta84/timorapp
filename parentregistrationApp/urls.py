@@ -1,27 +1,26 @@
 from .views import( PhoneValidation, check_phone_number, delete_student_view, list_suco, list_village, 
-                   register_student_view, 
+                   register_student_view, reset_password_and_send_sms, 
                    student_edit_view,
                    send_otp_view, otp_verify, 
                    registration_parent_view, 
                    list_municipality_view,
                    student_delete_view,
                   all_parents,
-                   #home,
-                   #get_administrative_posts,
-                   #get_sucos,
-                  #get_municipalities,
+                 
                    parent_home,
-                   #form_view, 
+                  
                    parent_update,
                    phone_num_val,
-                   #load_sucos,
+                  
                    list_posto_administrative,
-                   #  load_municipalities,
+                  
                      Login_View,
                      Logout_View,
                      reset_password,
-                     list_user
+                     list_user,
+                     
 )
+from django.contrib.auth import views as auth_views
 from .report import all_child
 from django.urls import path
 urlpatterns = [
@@ -31,7 +30,7 @@ urlpatterns = [
     path('parent-regist/', registration_parent_view, name='regist'),
     path('login/', Login_View.as_view(), name='login'),
     path('logout/', Logout_View.as_view(), name='logout'),
-
+    path('password-reset-sms/', reset_password_and_send_sms, name='reset_password_sms'),
     path('all-child/', all_child, name= 'all-child'),
 
     path('users/', list_user, name ='users'),
@@ -54,12 +53,18 @@ urlpatterns = [
     path('all-student/', all_child, name='all-student'),
 
     path('check-phone/', check_phone_number, name='check-phone'),
-   #path('load-municipalities/', load_municipalities, name='load-municipalities'),
-   
 
-   # path('home', home, name='home'),
-    #path('get-sucos/', get_sucos, name='get_sucos'),
-    #path('get-administrative-posts/', get_administrative_posts, name='get_administrative_posts'),
-    #path('get-municipalities/', get_municipalities, name='get_municipalities'),
-
+      # Password Reset
+    path('password-reset/', 
+         auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'), 
+         name='password_reset'),
+    path('password-reset/done/', 
+         auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), 
+         name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), 
+         name='password_reset_confirm'),
+    path('reset/done/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), 
+         name='password_reset_complete'),
 ]

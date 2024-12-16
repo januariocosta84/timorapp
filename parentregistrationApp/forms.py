@@ -1,27 +1,24 @@
 from django import forms
 from django.urls import reverse, reverse_lazy
+import phonenumbers
 from .models import Student, User, Village, Suco, AdministrativePost, Municipality,Parent
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 import datetime
 from django.contrib.auth.models import User
 import re
-from twilio.rest import Client
 import random
 import string
 from django.core.exceptions import ValidationError
 import datetime
-import os
 import re
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 import json
-from dotenv import load_dotenv
+from .twilio_conf import send_otp
 
-# Load environment variables from the .env file
-load_dotenv()
 
 now = datetime.datetime.now()
 
@@ -74,11 +71,19 @@ class ParentForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        pattern = re.compile(r'^\+6707\d{7}$')
-        if not pattern.match(username):
-            raise ValidationError("Phone number must start with +670 and have 8 digits starting with 7.")
 
-        # Check if the username (phone number) already exists
+        try:
+            # Parse the phone number, assuming it's in E.164 format (e.g., "+123456789")
+            phone_number = phonenumbers.parse(username, None)
+
+            # Validate the phone number
+            if not phonenumbers.is_valid_number(phone_number):
+                raise ValidationError("The phone number entered is not valid.")
+
+        except phonenumbers.NumberParseException:
+            raise ValidationError("The phone number entered is not valid.")
+
+        # Check if the phone number is already taken
         if User.objects.filter(username=username).exists():
             raise ValidationError("This phone number is already taken.")
 
@@ -86,46 +91,16 @@ class ParentForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
         # Generate a random password
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
         user.set_password(password)  # Set the generated password
-
         if commit:
             user.save()  # Save the user to the database
-
             # Send the OTP (password) to the user's phone number
             message = f": {password}"
             print(message)
             send_otp(user.username, message)  # Assuming username is the phone number
         return user
-
-def send_otp(phone_number, message):
-    account_sid = os.getenv('ACCOUNT_SID')
-    auth_token = os.getenv('AUTH_TOKEN')
-    from_number = os.getenv('FROM_WHATSAPP_NUMBER')
-    content_sid = os.getenv('CONTENT_SID')
-
-    client = Client(account_sid, auth_token)
-    phone_number = f"whatsapp:{phone_number}"
-    
-    try:
-        message = client.messages.create(
-            from_=from_number,
-            to=phone_number,
-            content_sid=content_sid,
-            content_variables=json.dumps(
-                {
-                    "1": phone_number,
-                    "2": message,
-                }
-            ),
-        )
-        print(f"Message sent successfully. SID: {message.sid}")
-        print(message.body)
-    except Exception as e:
-        print(f"Error: {e}")
-        
 
 class ParentFormRegist(forms.ModelForm):
     class Meta:
