@@ -50,14 +50,91 @@
     >
       <div class="bg-white py-2 collapse-inner border-bottom-info">
         <h6 class="collapse-header">Menus</h6>
-        <a class="collapse-item" href="{% url 'all-parents' %}"
-          ><i class="fas fa-users mr-2"></i> Lista Parentes</a
-        >
-        <a class="collapse-item" href="{% url 'all-student' %}"
-          ><i class="fas fa-child mr-2"></i> Lista Labarik sira</a
-        >
+        <a class="collapse-item" href="#">
+          <i class="fas fa-users mr-2"></i> Log Atividades
+        </a>
+        {% comment %}
+        <a class="collapse-item" href="{% url 'all-student' %}">
+          <i class="fas fa-child mr-2"></i> Lista Labarik sira
+        </a>
+        {% endcomment %}
       </div>
     </div>
+  </li>
+  {% endif %} {% if is_admin %}
+  <!-- Only visible to Admin -->
+  <div class="sidebar-heading">Administrator</div>
+
+  <!-- User Management Menu -->
+  <li class="nav-item">
+    <a
+      class="nav-link collapsed"
+      href="#"
+      data-toggle="collapse"
+      data-target="#collapseUserManagement"
+      aria-expanded="true"
+      aria-controls="collapseUserManagement"
+    >
+      <i class="fas fa-fw fa-users-cog"></i>
+      <span>Jestaun utilizadores</span>
+    </a>
+    <div
+      id="collapseUserManagement"
+      class="collapse"
+      aria-labelledby="headingUserManagement"
+      data-parent="#accordionSidebar"
+    >
+      <div class="bg-white py-2 collapse-inner border-bottom-info">
+        <h6 class="collapse-header">Jestaun Utilizador</h6>
+        <a class="collapse-item" href="#">
+          <i class="fas fa-list mr-2"></i> Lista utilizadores
+        </a>
+        <a class="collapse-item" href="#">
+          <i class="fas fa-user-slash mr-2"></i> Utilizador Nao Ativa
+        </a>
+        <a class="collapse-item" href="#">
+          <i class="fas fa-clipboard-list mr-2"></i> Log atividade
+        </a>
+      </div>
+    </div>
+  </li>
+
+  <!-- Report Menu -->
+  <li class="nav-item">
+    <a
+      class="nav-link collapsed"
+      href="#"
+      data-toggle="collapse"
+      data-target="#collapseReport"
+      aria-expanded="true"
+      aria-controls="collapseReport"
+    >
+      <i class="fas fa-fw fa-file-alt"></i>
+      <span>Relatoriu</span>
+    </a>
+    <div
+      id="collapseReport"
+      class="collapse"
+      aria-labelledby="headingReport"
+      data-parent="#accordionSidebar"
+    >
+      <div class="bg-white py-2 collapse-inner border-bottom-info">
+        <h6 class="collapse-header">Relatorio</h6>
+        <a class="collapse-item" href="#">
+          <i class="fas fa-user-tie mr-2"></i> Lista ba parentes
+        </a>
+        <a class="collapse-item" href="{%url 'all-child'%}">
+          <i class="fas fa-child mr-2"></i> List ba labarik sira nia
+        </a>
+      </div>
+    </div>
+  </li>
+  <!-- Conf Menu -->
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="fas fa-fw fa-cogs"></i>
+      <span>Conf Menu</span>
+    </a>
   </li>
   {% endif %}
 </ul>

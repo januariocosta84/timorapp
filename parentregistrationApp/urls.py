@@ -1,3 +1,4 @@
+from django import views
 from .views import( PhoneValidation, check_phone_number, delete_student_view, list_suco, list_village, 
                    register_student_view, reset_password_and_send_sms, 
                    student_edit_view,
@@ -18,13 +19,17 @@ from .views import( PhoneValidation, check_phone_number, delete_student_view, li
                      Logout_View,
                      reset_password,
                      list_user,
+                     all_users,
+                     admin_dashboard,
+                     parent_dashboard,
+                     teacher_dashboard,
                      
 )
 from django.contrib.auth import views as auth_views
 from .report import all_child
 from django.urls import path
 urlpatterns = [
-    path('', parent_home, name ='parent-dashboard'),
+    path('parent-dashboard/', parent_home, name ='parent-dashboard'),
   #  path('send-otp/', send_otp_view, name='send_otp'),
     path('verify-otp/', otp_verify, name='verify_otp'),
     path('parent-regist/', registration_parent_view, name='regist'),
@@ -50,21 +55,14 @@ urlpatterns = [
     path('load-num/',PhoneValidation.as_view(), name ='load-num'),
     
     path('parents/', all_parents, name='all-parents'),
-    path('all-student/', all_child, name='all-student'),
+    path('all-child/', all_child, name='all-child'),
 
     path('check-phone/', check_phone_number, name='check-phone'),
+    path('all-users/', all_users, name='all-users'),
+    
+    
+    path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
+    #path('parent-dashboard/', parent_dashboard, name='parent-dashboard'),
+    path('teacher-dashboard/', teacher_dashboard, name='teacher-dashboard'),
 
-      # Password Reset
-    path('password-reset/', 
-         auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'), 
-         name='password_reset'),
-    path('password-reset/done/', 
-         auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), 
-         name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', 
-         auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), 
-         name='password_reset_confirm'),
-    path('reset/done/', 
-         auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), 
-         name='password_reset_complete'),
 ]

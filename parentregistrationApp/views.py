@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, render,redirect, HttpResponse, r
 from django.urls import reverse
 from django.views.generic.base import View
 from django.contrib.auth.models import Group
-#from .otp_conf import sentotp
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 
 from parentregistrationApp.decorators import group_required
@@ -63,18 +63,24 @@ class Login_View(LoginView):
     model = get_user_model()
     form_class = LoginForm
     template_name = 'registration/login.html'
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            messages.success(request,"Ita Login ho susesu")
-            return redirect(resolve_url('parent-dashboard'))
+            messages.success(request, "Ita Login ho susesu")
+            return redirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        if self.request.user.is_authenticated:
-            messages.success(self.request,"Ita Login ho susesu")
+        # Redirect based on group membership
+        if self.request.user.groups.filter(name='Administrator').exists():
+            return resolve_url('admin-dashboard')
+        elif self.request.user.groups.filter(name='Parents').exists():
             return resolve_url('parent-dashboard')
-        return super().get_success_url()
-    
+        elif self.request.user.groups.filter(name='Teacher').exists():
+            return resolve_url('teacher-dashboard')
+        # Fallback URL for unaffiliated users
+        return resolve_url('default-dashboard')
+
     def form_invalid(self, form):
         messages.error(self.request, "Kredensiais la diak. Tenta fali.")
         return super().form_invalid(form)
@@ -141,8 +147,9 @@ def parent_update(request):
         form =ParentFormUpdate(instance=parent)
     return render(request, 'parent/parent_edit.html', {'form': form})
 
+# Parent dashboard view
 @login_required
-@group_required("Parents")
+@user_passes_test(lambda user: is_in_group(user, 'Parents'))
 def parent_home(request):
     id = request.user.id
     parent = get_object_or_404(Parent, user=id)
@@ -395,7 +402,52 @@ def reset_password_and_send_sms(request):
             send_otp(phone_number, message)
             return JsonResponse({'status': 'success', 'message': 'Password reset haruka tena liu husi sms whatsapp.'})
         except User.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Numeru telfone la valido'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Numeru telfone invalido ou sedauk rejista iha ami nia sistema'}, status=404)
 
     # Render the form for GET requests
     return render(request, 'otp/password_reset_sms.html')
+
+@group_required("Administrator")
+def all_users(request):
+    is_admin = request.user.groups.filter(name='Administrator').exists()
+    context ={
+        'user':User.objects.all(),
+        'is_admin': is_admin,  # Pass group membership to the template
+    }
+    return render(request,'dashboard/users.html',context=context)
+
+
+# Helper function to check group membership
+def is_in_group(user, group_name):
+    return user.groups.filter(name=group_name).exists()
+
+# Admin dashboard view
+@login_required
+@user_passes_test(lambda user: is_in_group(user, 'Administrator'))
+def admin_dashboard(request):
+    is_admin = request.user.groups.filter(name='Administrator').exists()
+    id = request.user.id
+    parent = get_object_or_404(Parent, user=id)
+    print("parent:", parent.id)
+    context ={
+        'user':User.objects.all(),
+        'child':Student.objects.count(),
+        'is_admin':is_admin,
+        'count_parents' :Parent.objects.count(),
+         'parents' :Parent.objects.all()
+       
+    }
+    
+    return render(request, 'dashboard/admin_dashboard.html', context=context)
+
+# Parent dashboard view
+@login_required
+@user_passes_test(lambda user: is_in_group(user, 'Parents'))
+def parent_dashboard(request):
+    return render(request, 'dashboard/parent_dashboard.html')
+
+# Teacher dashboard view
+@login_required
+@user_passes_test(lambda user: is_in_group(user, 'Teacher'))
+def teacher_dashboard(request):
+    return render(request, 'dashboard/teacher_dashboard.html')

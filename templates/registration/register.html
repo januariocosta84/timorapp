@@ -8,36 +8,40 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta name="description" content="Formuláriu rejistu parentes" />
+    <meta name="author" content="WorlMosaic Ed Tech" />
 
-    <title>Formuláriu rejistu parentes</title>
+    <title>Formuláriu Rejistu Parentes</title>
 
+    <!-- Include external CSS -->
     {% include './css.html' %}
-    <!-- Ensure the correct path to your 'css.html' file -->
   </head>
-
   <body class="bg-gradient-info">
     <div class="container">
       <div
         class="card o-hidden border-none shadow-lg my-5 bg-gradient border-bottom-info"
       >
         <div class="card-body p-0">
-          <!-- Nested Row within Card Body -->
           <div class="row">
+            <!-- Left Column (Image) -->
             <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+            <!-- Right Column (Form) -->
             <div class="col-lg-12">
               <div class="p-5">
+                <!-- Header Section -->
                 <div
-                  class="text-muted text-uppercase card-header border-bottom-info"
+                  class="card-header border-bottom-info text-uppercase text-muted"
                 >
-                  <h1 class="h4 text-gray-900 mb-4">Kria Konta Foun!</h1>
+                  <h1 class="h4 text-gray-900 mb-4 text-center">
+                    Formuláriu: Halo Konta Foun!
+                  </h1>
                 </div>
-
+                <!-- Form Section -->
                 <div class="card-body">
-                  {% include 'dashboard/messaging.html'%}
+                  {% include 'dashboard/messaging.html' %}
                   <form class="user" method="POST">
                     {% csrf_token %}
+                    <!-- Name Fields -->
                     <div class="form-group row">
                       <div class="col-sm-6 mb-3 mb-sm-0">
                         {{ form.first_name.label_tag }} {{ form.first_name }}
@@ -46,20 +50,19 @@
                         {{ form.last_name.label_tag }} {{ form.last_name }}
                       </div>
                     </div>
+                    <!-- Contact Fields -->
                     <div class="form-group row">
                       <div class="col-sm-6">
                         {{ form.email.label_tag }} {{ form.email }}
                       </div>
                       <div class="col-sm-6">
                         {{ form.username.label_tag }} {{ form.username }}
-                        <small
-                          id="phone-error"
-                          style="color: red; display: none"
-                        >
-                          Phone number ida ne'e rejistadu ona!
+                        <small id="phone-error" class="text-danger d-none">
+                          Numeru telfone ida ne'e rejistadu ona!
                         </small>
                       </div>
                     </div>
+                    <!-- Address Fields -->
                     <div class="form-group row">
                       <div class="col-sm-6">
                         {{ parent_add.municipality.label_tag }}
@@ -79,6 +82,7 @@
                         {{parent_add.village}}
                       </div>
                     </div>
+                    <!-- Submit Button -->
                     <div class="form-group row">
                       <div class="col-sm-3">
                         <button class="btn btn-info" id="submit-button">
@@ -91,23 +95,24 @@
               </div>
             </div>
           </div>
-
+          <!-- Footer Section -->
           <div class="card-footer">
             <div class="text-center">
-              <a class="small" href="{%url 'reset_password_sms'%}"
+              <a class="small" href="{% url 'reset_password_sms' %}"
                 >Haluan Password?</a
               >
             </div>
             <div class="text-center">
-              <a class="small" href="{%url 'login'%}"
+              <a class="small" href="{% url 'login' %}"
                 >Iha ona konta familia? Login!</a
               >
             </div>
           </div>
+          <!-- Sticky Footer -->
           <footer class="sticky-footer bg-white">
             <div class="container my-auto">
               <div class="copyright text-center my-auto">
-                <span>Copyright &copy; WorlMosaic Ed Tech 2024</span>
+                <span>&copy; WorlMosaic Ed Tech 2024</span>
               </div>
             </div>
           </footer>
@@ -115,38 +120,46 @@
       </div>
     </div>
 
+    <!-- Include external JS -->
     {% include './js.html' %}
-    <!-- Ensure the correct path to your 'js.html' file -->
-  </body>
-  <script>
-    const phoneInput = document.getElementById("id_username");
-    const errorDisplay = document.getElementById("phone-error");
-    const submitButton = document.getElementById("submit-button");
 
-    phoneInput.addEventListener("input", () => {
-      const phone = encodeURIComponent(phoneInput.value); // Properly encode the phone number
+    <script>
+      // Phone validation logic
+      const phoneInput = document.getElementById("id_username");
+      const errorDisplay = document.getElementById("phone-error");
+      const submitButton = document.getElementById("submit-button");
 
-      if (phone) {
-        fetch(`/check-phone/?phone=${phone}`)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (data.exists) {
-              errorDisplay.style.display = "block";
-              console.log(data.phone);
-              submitButton.disabled = true;
-            } else {
-              errorDisplay.style.display = "none";
-              submitButton.disabled = false;
-            }
-          })
-          .catch((error) => {
-            console.error("Error checking phone number:", error);
-          });
-      } else {
-        errorDisplay.style.display = "none";
+      const phoneRegex = /^\+?[1-9]\d{1,14}$/; // E.164 format regex for phone numbers
+
+      phoneInput.addEventListener("input", () => {
+        const phone = phoneInput.value.trim();
+
+        if (phone && !phoneRegex.test(phone)) {
+          errorDisplay.textContent = "Laos numeru nebe validu.";
+          errorDisplay.classList.remove("d-none");
+          submitButton.disabled = true;
+          return;
+        }
+
+        errorDisplay.classList.add("d-none");
         submitButton.disabled = false;
-      }
-    });
-  </script>
+
+        if (phone) {
+          fetch(`/check-phone/?phone=${encodeURIComponent(phone)}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.exists) {
+                errorDisplay.textContent =
+                  "Numeru telfone ida ne'e rejistadu ona.";
+                errorDisplay.classList.remove("d-none");
+                submitButton.disabled = true;
+              }
+            })
+            .catch((error) =>
+              console.error("Error checking phone number:", error)
+            );
+        }
+      });
+    </script>
+  </body>
 </html>

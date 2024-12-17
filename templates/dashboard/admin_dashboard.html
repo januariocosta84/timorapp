@@ -1,0 +1,100 @@
+{% extends "dashboard/layout.html" %} {%block content%}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+              >
+                Total Labarik rejistadu
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{child}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-child fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Annual) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                Total Parentes rejistadu
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{count_parents}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-info">
+      <h6 class="m-0 font-weight-bold text-primary">Lista Parentes</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table
+          class="table table-bordered"
+          id="dataTable"
+          width="100%"
+          cellspacing="0"
+        >
+          <thead>
+            <tr>
+              <th>Naran</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Munisipiu</th>
+              <th>Posto</th>
+              <th>Suku</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <!-- <tfoot>
+                        <tr>
+                            <th>Naran</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Age</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </tfoot> -->
+          <tbody>
+            {% for parent in parents %}
+            <tr>
+              <td>{{parent.first_name}} {{parent.last_name}}</td>
+              <td>{{parent.phone}}</td>
+              <td>{{parent.email}}</td>
+              <td>{{parent.municipality}}</td>
+              <td>{{parent.administrative_post }}</td>
+              <td>{{parent.suco}}</td>
+              <td><button type="button" class="btn btn-info">Edit</button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

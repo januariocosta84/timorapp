@@ -28,14 +28,23 @@
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="username" class="label">Numeru Telefone</label>
+
                     <div class="input-group">
                       {{ form.username }}
+
                       <div class="input-group-append">
                         <span class="input-group-text">
                           <i class="mdi mdi-check-circle-outline"></i>
                         </span>
                       </div>
+                      <br>
+                      <small id="phone-error" class="text-danger d-none">
+                        Numeru telfone ida ne'e rejistadu ona!
+                      </small>
                     </div>
+                    <small id="phone-error" class="text-danger d-none">
+                      Numeru telfone ida ne'e rejistadu ona!
+                    </small>
                   </div>
                   <div class="form-group">
                     <label for="password" class="label">Palavras Passe</label>
@@ -87,4 +96,39 @@
     </footer>
   </div>
 </div>
+<script>
+  // Phone validation logic
+  const phoneInput = document.getElementById("id_username");
+  const errorDisplay = document.getElementById("phone-error");
+  const submitButton = document.getElementById("submit-button");
+
+  const phoneRegex = /^\+?[1-9]\d{1,14}$/; // E.164 format regex for phone numbers
+
+  phoneInput.addEventListener("input", () => {
+    const phone = phoneInput.value.trim();
+
+    if (phone && !phoneRegex.test(phone)) {
+      errorDisplay.textContent = "Laos numeru nebe validu.";
+      errorDisplay.classList.remove("d-none");
+      submitButton.disabled = true;
+      return;
+    }
+
+    errorDisplay.classList.add("d-none");
+    submitButton.disabled = false;
+
+    if (phone) {
+      fetch(`/check-phone/?phone=${encodeURIComponent(phone)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.exists) {
+            errorDisplay.textContent = "Numeru telfone ida ne'e rejistadu ona.";
+            errorDisplay.classList.remove("d-none");
+            submitButton.disabled = true;
+          }
+        })
+        .catch((error) => console.error("Error checking phone number:", error));
+    }
+  });
+</script>
 {%include './js.html' %}
