@@ -7,7 +7,7 @@ from .views import( PhoneValidation, check_phone_number, delete_student_view, li
                    list_municipality_view,
                    student_delete_view,
                   all_parents,
-                 
+                 log_activity,
                    parent_home,
                   
                    parent_update,
@@ -33,7 +33,7 @@ urlpatterns = [
   #  path('send-otp/', send_otp_view, name='send_otp'),
     path('verify-otp/', otp_verify, name='verify_otp'),
     path('parent-regist/', registration_parent_view, name='regist'),
-    path('login/', Login_View.as_view(), name='login'),
+    path('', Login_View.as_view(), name='login'),
     path('logout/', Logout_View.as_view(), name='logout'),
     path('password-reset-sms/', reset_password_and_send_sms, name='reset_password_sms'),
     path('all-child/', all_child, name= 'all-child'),
@@ -64,5 +64,6 @@ urlpatterns = [
     path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
     #path('parent-dashboard/', parent_dashboard, name='parent-dashboard'),
     path('teacher-dashboard/', teacher_dashboard, name='teacher-dashboard'),
+    path('parent-dashboard/child-log/', log_activity, name='log-activity'),
 
 ]

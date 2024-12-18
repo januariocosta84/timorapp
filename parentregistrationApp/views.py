@@ -451,3 +451,15 @@ def parent_dashboard(request):
 @user_passes_test(lambda user: is_in_group(user, 'Teacher'))
 def teacher_dashboard(request):
     return render(request, 'dashboard/teacher_dashboard.html')
+
+# Admin dashboard view
+@login_required
+@user_passes_test(lambda user: is_in_group(user, 'Parents'))
+def log_activity(request):
+    is_parent = request.user.groups.filter(name='Parents').exists()
+    context ={
+        'log':'I am A log ',
+        'is_parent':is_parent,
+    }
+    return render(request, 'dashboard/log.html', context=context)
+    

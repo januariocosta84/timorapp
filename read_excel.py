@@ -1,10 +1,9 @@
 import os
 import django
 
-# Set the DJANGO_SETTINGS_MODULE environment variable to your settings file
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TimorWebApp.settings')
 
-# Initialize Django
 django.setup()
 from openpyxl import load_workbook
 from parentregistrationApp.models import Municipality, AdministrativePost, Suco, Village

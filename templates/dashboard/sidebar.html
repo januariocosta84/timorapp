@@ -3,10 +3,17 @@
   id="accordionSidebar"
 >
   <!-- Sidebar - Brand -->
+  {% if is_admin%}
   <a
     class="sidebar-brand d-flex align-items-center justify-content-center"
-    href="{% url 'parent-dashboard' %}"
+    href="{% url 'admin-dashboard' %}"
   >
+  {%else%}
+  <a
+  class="sidebar-brand d-flex align-items-center justify-content-center"
+  href="{% url 'parent-dashboard' %}"
+>
+  {%endif%}
     <div class="sidebar-brand-icon rotate-n-15"></div>
     <div class="sidebar-brand-text mx-3">
       HAHU <i class="flag-icon flag-icon-tl mr-2"></i>APP<sup></sup>
@@ -17,12 +24,21 @@
   <hr class="sidebar-divider my-0" />
 
   <!-- Nav Item - Dashboard -->
+  {%if is_admin %}
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'admin-dashboard' %}">
+      <i class="fas fa-fw fa-tachometer-alt"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+  {%else%}
   <li class="nav-item active">
     <a class="nav-link" href="{% url 'parent-dashboard' %}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span>
     </a>
   </li>
+  {%endif%}
 
   <!-- Divider -->
   <hr class="sidebar-divider" />
@@ -50,7 +66,7 @@
     >
       <div class="bg-white py-2 collapse-inner border-bottom-info">
         <h6 class="collapse-header">Menus</h6>
-        <a class="collapse-item" href="#">
+        <a class="collapse-item" href="{%url 'log-activity'%}">
           <i class="fas fa-users mr-2"></i> Log Atividades
         </a>
         {% comment %}
