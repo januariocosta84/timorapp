@@ -5,97 +5,100 @@
     background-position: center;
     background-size: cover;
   }
+  .bg-gradient-info {
+    background: linear-gradient(90deg, #6cb4f1, #0056b3);
+  }
 </style>
-<div class="container">
-  <!-- Outer Row -->
-  <div class="row justify-content-center">
-    <div class="col-xl-10 col-lg-12 col-md-9">
-      <div class="card o-hidden border-0 shadow-lg my-5 border-bottom-info">
-        <div class="card-body p-0">
-          {% include 'dashboard/messaging.html' %}
-          <!-- Nested Row within Card Body -->
-          <div class="row">
-            <div
-              class="col-lg-6 d-none d-lg-block bg-login-image border-left-warning"
-            ></div>
-            <div class="col-lg-6">
-              <div class="p-5">
-                <div class="text-center border-bottom-info mb-3">
-                  <h1 class="h4 text-gray-900 mb-4">Bemvindo mai HAHU App!</h1>
-                </div>
-
-                <form action="{% url 'login' %}" method="POST">
-                  {% csrf_token %}
-                  <div class="form-group">
-                    <label for="username" class="label">Numeru Telefone</label>
-
-                    <div class="input-group">
-                      {{ form.username }}
-
-                      <div class="input-group-append">
-                        <span class="input-group-text">
-                          <i class="mdi mdi-check-circle-outline"></i>
-                        </span>
+<body class="bg-gradient-info">
+  <div class="container ">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+      <div class="col-xl-10 col-lg-12 col-md-9">
+        <div class="card o-hidden border-0 shadow-lg my-5 border-bottom-info">
+          <div class="card-body p-0">
+            {% include 'dashboard/messaging.html' %}
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div
+                class="col-lg-6 d-none d-lg-block bg-login-image border-left-warning"
+              ></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center border-bottom-info mb-3">
+                    <h1 class="h4 text-gray-900 mb-4">Bemvindo mai HAHU App!</h1>
+                  </div>
+  
+                  <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="username" class="label">Numeru Telefone</label>
+  
+                      <div class="input-group">
+                        {{ form.username }}
+  
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="mdi mdi-check-circle-outline"></i>
+                          </span>
+                        </div>
+                        <br />
+                        <small id="phone-error" class="text-danger d-none">
+                          Numeru telfone ida ne'e rejistadu ona!
+                        </small>
                       </div>
-                      <br>
                       <small id="phone-error" class="text-danger d-none">
                         Numeru telfone ida ne'e rejistadu ona!
                       </small>
                     </div>
-                    <small id="phone-error" class="text-danger d-none">
-                      Numeru telfone ida ne'e rejistadu ona!
-                    </small>
-                  </div>
-                  <div class="form-group">
-                    <label for="password" class="label">Palavras Passe</label>
-                    <div class="input-group">
-                      {{ form.password }}
-                      <div class="input-group-append">
-                        <span class="input-group-text">
-                          <i class="mdi mdi-check-circle-outline"></i>
-                        </span>
+                    <div class="form-group">
+                      <label for="password" class="label">Palavras Passe</label>
+                      <div class="input-group">
+                        {{ form.password }}
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="mdi mdi-check-circle-outline"></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-success">Login</button>
-                  </div>
-                  <div class="text-block text-center my-3">
-                    <span class="text-small font-weight-semibold"
-                      >Laos Membro ?</span
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-success">Login</button>
+                    </div>
+                    <div class="text-block text-center my-3">
+                      <span class="text-small font-weight-semibold"
+                        >Laos Membro ?</span
+                      >
+                      <a href="{%url 'regist'%}" class="text-black text-small"
+                        >Rejistu Konta Foun</a
+                      >
+                    </div>
+                  </form>
+  
+                  <div class="text-center">
+                    <a class="small" href="{%url 'reset_password_sms'%}"
+                      >Haluan Password?</a
                     >
-                    <a href="{%url 'regist'%}" class="text-black text-small"
-                      >Rejistu Konta Foun</a
+                  </div>
+                  <div class="text-center">
+                    <a class="small" href="{% url 'regist' %}"
+                      >Rejistu Konta foun!</a
                     >
                   </div>
-                </form>
-
-                <div class="text-center">
-                  <a class="small" href="{%url 'reset_password_sms'%}"
-                    >Haluan Password?</a
-                  >
-                </div>
-                <div class="text-center">
-                  <a class="small" href="{% url 'regist' %}"
-                    >Rejistu Konta foun!</a
-                  >
                 </div>
               </div>
             </div>
           </div>
+          
+       <div class="card-footer text-center">
+        &copy; WorlMosaic Ed Tech 2024
+      </div>
         </div>
       </div>
+  
     </div>
-
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-          <span>Copyright &copy; WorlMosaic Ed Tech 2024</span>
-        </div>
-      </div>
-    </footer>
   </div>
-</div>
+</body>
+
 <script>
   // Phone validation logic
   const phoneInput = document.getElementById("id_username");

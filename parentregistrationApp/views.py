@@ -398,7 +398,7 @@ def reset_password_and_send_sms(request):
             new_password = generate_random_password()
             user.set_password(new_password)
             user.save()
-            message = f'Your new password is: {new_password}'
+            message = f': {new_password}\nobrigado'
             send_otp(phone_number, message)
             return JsonResponse({'status': 'success', 'message': 'Password reset haruka tena liu husi sms whatsapp.'})
         except User.DoesNotExist:
